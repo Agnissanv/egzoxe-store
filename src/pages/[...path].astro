@@ -1,0 +1,19 @@
+---
+// Pages pas encore construites (étape suivante) : elles affichent « En préparation ».
+import ComingSoonPage from '../components/pages/ComingSoonPage.astro';
+import { COMING_SOON, ROUTES } from '../lib/routes';
+import { LANGS } from '../lib/i18n';
+
+export function getStaticPaths() {
+  return COMING_SOON.flatMap((page) =>
+    LANGS.map((lang) => ({
+      params: { path: ROUTES[page][lang].replace(/^\/|\/$/g, '') },
+      props: { page, lang },
+    })),
+  );
+}
+
+const { page, lang } = Astro.props;
+---
+
+<ComingSoonPage lang={lang} page={page} />

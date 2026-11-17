@@ -1,0 +1,45 @@
+{
+  "slug": {
+    "fr": "gouttes-detox",
+    "en": "gouttes-detox"
+  },
+  "need": "detox",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Gouttes Détox",
+    "en": "Detox Drops"
+  },
+  "variants": [
+    {
+      "id": "30ml",
+      "label": {
+        "fr": "30 ml",
+        "en": "30 ml"
+      },
+      "price": 7000
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Un coup de pouce à ton équilibre au quotidien",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "A boost for your daily balance",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

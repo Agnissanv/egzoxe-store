@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t } from '../lib/i18n';
+import { route, routePair } from '../lib/routes';
+
+const d = t('fr');
+const e = t('en');
+---
+
+<BaseLayout lang="fr" title={d.meta.notFoundTitle} description={d.notFound.text} alternate={routePair('home')}>
+  <section class="container nf">
+    <h1>{d.meta.notFoundTitle}</h1>
+    <p class="section-lead">{d.notFound.text}</p>
+    <p class="section-lead" lang="en">{e.meta.notFoundTitle}. {e.notFound.text}</p>
+    <a class="btn btn-primary" href={route('home', 'fr')}>{d.buttons.backHome}</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+    padding-top: 64px;
+    padding-bottom: 96px;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+  }
+</style>

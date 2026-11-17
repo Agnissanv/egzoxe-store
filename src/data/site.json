@@ -1,0 +1,38 @@
+{
+  "_note": "Réglages généraux du site. Le numéro WhatsApp est à reconfirmer avec Franck.",
+  "whatsappNumber": "2250505267574",
+  "whatsappDisplay": "+225 05 05 26 75 74",
+  "tiktokUrl": "https://www.tiktok.com/@frateg",
+  "tiktokHandle": "@frateg",
+  "agencyUrl": "https://agnissanisaac.com",
+  "needs": {
+    "immunity": {
+      "fr": "Immunité",
+      "en": "Immunity",
+      "disc": "#6FD12A"
+    },
+    "detox": {
+      "fr": "Détox",
+      "en": "Detox",
+      "disc": "#1F7A2A"
+    },
+    "energy": {
+      "fr": "Énergie",
+      "en": "Energy",
+      "disc": "#F67A06"
+    },
+    "digestion": {
+      "fr": "Digestion",
+      "en": "Digestion",
+      "disc": "#FFD9A8"
+    }
+  },
+  "brands": [
+    "Marque A",
+    "Marque B"
+  ],
+  "healthNote": {
+    "fr": "Complément alimentaire. Ne remplace pas un traitement médical ni une alimentation variée.",
+    "en": "Food supplement. Does not replace medical treatment or a varied diet."
+  }
+}

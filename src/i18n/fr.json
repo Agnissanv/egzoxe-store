@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "siteName": "EGZOXÉ store",
+    "homeTitle": "EGZOXÉ store · Compléments alimentaires YUPI et LIVEGOOD à Abidjan",
+    "homeDescription": "Les compléments alimentaires YUPI et LIVEGOOD, livrés chez toi partout en Côte d'Ivoire et à l'étranger. Commande sur WhatsApp, paiement à la livraison en Côte d'Ivoire.",
+    "shopTitle": "Boutique",
+    "shopDescription": "Les compléments alimentaires YUPI et LIVEGOOD, classés par besoin : immunité, détox, énergie, digestion.",
+    "bundlesTitle": "Forfaits",
+    "bundlesDescription": "Des packs de compléments alimentaires prêts à commander, regroupés autour d'un même besoin.",
+    "cartTitle": "Panier",
+    "cartDescription": "Ton panier EGZOXÉ store : envoie ta commande sur WhatsApp en un geste.",
+    "notFoundTitle": "Page introuvable"
+  },
+  "a11y": {
+    "skip": "Aller au contenu",
+    "menu": "Ouvrir le menu",
+    "mainNav": "Navigation principale",
+    "footerNav": "Liens utiles",
+    "home": "EGZOXÉ store, retour à l'accueil",
+    "cart": "Panier",
+    "cartItems": "article(s) dans le panier",
+    "langSwitch": "Langue",
+    "whatsapp": "Écrire à EGZOXÉ store sur WhatsApp",
+    "decrease": "Diminuer la quantité",
+    "increase": "Augmenter la quantité",
+    "breadcrumb": "Fil d'Ariane",
+    "filters": "Filtres de la boutique"
+  },
+  "nav": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "blog": "Blog",
+    "about": "À propos",
+    "contact": "Contact",
+    "bundles": "Forfaits",
+    "cart": "Panier",
+    "faq": "FAQ",
+    "reviews": "Avis clients",
+    "delivery": "Livraison",
+    "legal": "Mentions légales",
+    "trackOrder": "Suivre ma commande"
+  },
+  "announcement": {
+    "delivery": "Livraison partout en Côte d'Ivoire et à l'étranger",
+    "fees": "Frais confirmés sur WhatsApp"
+  },
+  "buttons": {
+    "seeProducts": "Voir les produits",
+    "seeShop": "Voir toute la boutique",
+    "addToCart": "Ajouter au panier",
+    "learnMore": "En savoir plus",
+    "orderWhatsapp": "Commander sur WhatsApp",
+    "trackOrder": "Suivre ma commande",
+    "writeWhatsapp": "Écrire sur WhatsApp",
+    "copyOrder": "Copier la commande",
+    "send": "Envoyer",
+    "subscribe": "Je m'inscris",
+    "goShop": "Voir la boutique",
+    "seeBundles": "Voir les forfaits",
+    "seeCart": "Voir le panier",
+    "openWhatsapp": "Ouvrir WhatsApp",
+    "clearCart": "Vider le panier",
+    "remove": "Retirer",
+    "backHome": "Retour à l'accueil"
+  },
+  "product": {
+    "duration": "Durée conseillée",
+    "directions": "Mode d'emploi",
+    "chooseSize": "Choisis ta taille",
+    "quantity": "Quantité",
+    "from": "À partir de",
+    "ingredients": "Ingrédients",
+    "precautions": "Précautions",
+    "benefits": "Ce qu'il t'apporte",
+    "related": "Du même besoin",
+    "brand": "Marque",
+    "exampleBadge": "Exemple",
+    "placeholderNote": "Produit d'exemple pour la maquette : nom, prix et textes seront remplacés par le vrai produit."
+  },
+  "needs": {
+    "immunity": {
+      "label": "Immunité",
+      "text": "Soutiens tes défenses naturelles"
+    },
+    "detox": {
+      "label": "Détox",
+      "text": "Un coup de pouce à ton équilibre au quotidien"
+    },
+    "energy": {
+      "label": "Énergie",
+      "text": "Garde le rythme toute la journée"
+    },
+    "digestion": {
+      "label": "Digestion",
+      "text": "Pour ton confort digestif"
+    }
+  },
+  "home": {
+    "heroTitleStart": "Prends soin de toi,",
+    "heroTitleAccent": "chaque jour",
+    "heroSubtitle": "Les compléments alimentaires YUPI et LIVEGOOD, livrés chez toi.",
+    "heroPoints": [
+      "Commande simple sur WhatsApp",
+      "Paiement à la livraison en Côte d'Ivoire"
+    ],
+    "needsTitle": "Choisis selon ton besoin",
+    "featuredTitle": "Les plus demandés",
+    "bundlesTitle": "Des packs prêts à commander",
+    "bundlesText": "Plusieurs produits associés autour d'un même besoin. Un seul message pour tout commander.",
+    "stepsTitle": "3 étapes simples",
+    "steps": [
+      {
+        "title": "Choisis tes produits",
+        "text": "Ajoute-les au panier."
+      },
+      {
+        "title": "Envoie ta commande sur WhatsApp",
+        "text": "Le message est déjà écrit, tu n'as qu'à appuyer sur envoyer."
+      },
+      {
+        "title": "Reçois et paie à la livraison",
+        "text": "Nous confirmons avec toi le stock et les frais de livraison. En Côte d'Ivoire, tu paies à la réception. À l'étranger, nous convenons des modalités avec toi."
+      }
+    ],
+    "reviewsTitle": "Ils en parlent",
+    "reviewsText": "Des clients partagent leur expérience sur TikTok.",
+    "faqTitle": "Tes questions",
+    "faq": [
+      {
+        "q": "Combien de temps dois-je prendre un complément ?",
+        "a": "Suis la durée conseillée indiquée sur la fiche du produit et sur son emballage. En cas de doute, demande conseil à un professionnel de santé."
+      },
+      {
+        "q": "Comment prendre mon produit ?",
+        "a": "Le mode d'emploi est sur chaque fiche. Une question ? Écris-nous sur WhatsApp."
+      },
+      {
+        "q": "Comment se passe la livraison ?",
+        "a": "Nous livrons partout en Côte d'Ivoire et à l'étranger. Les frais dépendent de ton lieu de livraison et sont confirmés sur WhatsApp avant l'envoi."
+      }
+    ],
+    "faqMore": "Toutes les questions"
+  },
+  "shop": {
+    "title": "Boutique",
+    "intro": "Choisis tes compléments par besoin ou par marque.",
+    "need": "Besoin",
+    "brand": "Marque",
+    "all": "Tout",
+    "search": "Rechercher un produit",
+    "searchPlaceholder": "Nom du produit…",
+    "count": "{n} produit(s)",
+    "noResults": "Aucun produit ne correspond. Essaie un autre besoin ou un autre mot.",
+    "reset": "Tout afficher",
+    "bundlesBanner": "Envie de tout commander en une fois ?"
+  },
+  "bundles": {
+    "title": "Forfaits",
+    "intro": "Plusieurs produits associés autour d'un même besoin. Un seul message pour tout commander.",
+    "contains": "Dans ce pack",
+    "insteadOf": "au lieu de"
+  },
+  "cart": {
+    "title": "Ton panier",
+    "empty": "Ton panier est vide. Découvre nos produits pour commencer.",
+    "productsTotal": "Total produits",
+    "deliveryFees": "Frais de livraison",
+    "deliveryFeesValue": "à confirmer sur WhatsApp",
+    "formTitle": "Tes coordonnées",
+    "formIntro": "Elles sont ajoutées au message WhatsApp. Rien ne part tant que tu n'appuies pas sur « envoyer » dans WhatsApp.",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "country": "Pays",
+    "countryCI": "Côte d'Ivoire",
+    "countryOther": "Autre pays",
+    "otherCountry": "Quel pays ?",
+    "city": "Ville",
+    "address": "Adresse de livraison",
+    "errors": {
+      "name": "Indique ton nom.",
+      "phone": "Indique un numéro de téléphone valide.",
+      "country": "Indique ton pays.",
+      "city": "Indique ta ville.",
+      "address": "Indique ton adresse de livraison."
+    },
+    "paymentCI": "En Côte d'Ivoire, tu paies à la livraison, en espèces.",
+    "paymentOther": "À l'étranger, nous convenons des modalités avec toi sur WhatsApp.",
+    "longOrder": "Ta commande est longue. Copie-la, puis colle-la dans la conversation WhatsApp.",
+    "copied": "Commande copiée. Ouvre WhatsApp et colle-la dans la conversation.",
+    "alreadyOrdered": "Déjà commandé ?",
+    "copyFailed": "Copie automatique impossible : sélectionne le texte ci-dessous et copie-le."
+  },
+  "message": {
+    "orderIntro": "Bonjour EGZOXÉ store, je souhaite commander :",
+    "lineSep": " : ",
+    "productsTotal": "Total produits :",
+    "deliveryFees": "Frais de livraison : à confirmer",
+    "name": "Nom :",
+    "phone": "Téléphone :",
+    "cityCountry": "Ville / pays :",
+    "address": "Adresse de livraison :",
+    "paymentCI": "Paiement : à la livraison",
+    "paymentOther": "Paiement : à convenir",
+    "track": "Bonjour EGZOXÉ store, je souhaite suivre ma commande.\nNom : \nDate de commande : ",
+    "hello": "Bonjour EGZOXÉ store, "
+  },
+  "reviews": {
+    "exampleBadge": "Exemple"
+  },
+  "newsletter": {
+    "title": "Reste informé.",
+    "text": "Reçois les nouveautés et nos conseils bien-être.",
+    "email": "Ton e-mail",
+    "pending": "Maquette : l'inscription sera branchée à la prochaine étape."
+  },
+  "footer": {
+    "healthNote": "Ces produits sont des compléments alimentaires. Ils ne remplacent pas un traitement médical ni une alimentation variée.",
+    "brandsTitle": "Nos marques",
+    "brandsPlaceholder": [
+      "[Logo YUPI GLOBAL]",
+      "[Logo LIVEGOOD]"
+    ],
+    "follow": "Suis-nous",
+    "city": "Abidjan, Côte d'Ivoire",
+    "madeBy": "Site réalisé par Code A-Z",
+    "rights": "© 2026 EGZOXÉ store"
+  },
+  "toast": {
+    "added": "Ajouté au panier"
+  },
+  "comingSoon": {
+    "badge": "En préparation",
+    "text": "Cette page arrive à la prochaine étape. En attendant, découvre la boutique ou écris-nous sur WhatsApp."
+  },
+  "notFound": {
+    "text": "Cette page n'existe pas ou a été déplacée."
+  }
+}

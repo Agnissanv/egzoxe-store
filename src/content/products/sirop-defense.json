@@ -1,0 +1,53 @@
+{
+  "slug": {
+    "fr": "sirop-defense",
+    "en": "sirop-defense"
+  },
+  "need": "immunity",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Sirop Défense",
+    "en": "Defense Syrup"
+  },
+  "variants": [
+    {
+      "id": "250",
+      "label": {
+        "fr": "250 ml",
+        "en": "250 ml"
+      },
+      "price": 5500
+    },
+    {
+      "id": "500",
+      "label": {
+        "fr": "500 ml",
+        "en": "500 ml"
+      },
+      "price": 9000
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Contribue à soutenir tes défenses naturelles",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "Helps support your natural defenses",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

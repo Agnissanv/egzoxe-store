@@ -1,0 +1,111 @@
+---
+// Produit posé sur un disque (signature « O orange »), couleur selon le besoin.
+// Tant que la vraie photo n'est pas fournie, on dessine une silhouette neutre.
+import { Picture } from 'astro:assets';
+import { needColor, placeholderShape, type Product, type Shape } from '../lib/catalog';
+
+interface Props {
+  product: Product;
+  size?: 'sm' | 'md' | 'lg';
+  eager?: boolean;
+  alt?: string;
+}
+const { product, size = 'md', eager = false, alt = '' } = Astro.props;
+const color = needColor(product.data.need);
+const image = product.data.image;
+const shape: Shape = placeholderShape(product);
+const widths = { sm: [80, 160], md: [240, 480], lg: [420, 640, 840] }[size];
+---
+
+<div class:list={['pv', `pv-${size}`]} style={`--disc: ${color}`}>
+  {
+    image === 'placeholder' ? (
+      <svg class="pv-art" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+        <ellipse cx="60" cy="103" rx="28" ry="4.5" fill="rgb(3 39 16 / 0.18)" />
+        {shape === 'jar' && (
+          <g>
+            <rect x="41" y="21" width="38" height="15" rx="4" fill="#032710" />
+            <rect x="35" y="33" width="50" height="68" rx="11" fill="#ffffff" stroke="rgb(3 39 16 / 0.14)" />
+            <rect x="35" y="54" width="50" height="27" fill="#032710" />
+            <circle cx="60" cy="67.5" r="7" fill="#F67A06" />
+          </g>
+        )}
+        {shape === 'bottle' && (
+          <g>
+            <rect x="50" y="12" width="20" height="13" rx="3" fill="#032710" />
+            <path d="M53 25h14v9c0 3 13 6 13 18v40a9 9 0 0 1-9 9H49a9 9 0 0 1-9-9V52c0-12 13-15 13-18Z" fill="#ffffff" stroke="rgb(3 39 16 / 0.14)" />
+            <rect x="40" y="58" width="40" height="26" fill="#032710" />
+            <circle cx="60" cy="71" r="6.5" fill="#F67A06" />
+          </g>
+        )}
+        {shape === 'dropper' && (
+          <g>
+            <ellipse cx="60" cy="19" rx="7.5" ry="9" fill="#032710" />
+            <rect x="51" y="26" width="18" height="12" rx="3" fill="#032710" />
+            <rect x="44" y="37" width="32" height="64" rx="9" fill="#ffffff" stroke="rgb(3 39 16 / 0.14)" />
+            <rect x="44" y="58" width="32" height="25" fill="#032710" />
+            <circle cx="60" cy="70.5" r="6" fill="#F67A06" />
+          </g>
+        )}
+        {shape === 'box' && (
+          <g>
+            <path d="M33 34 41 24h38l8 10Z" fill="#e9e1d3" />
+            <rect x="33" y="34" width="54" height="67" rx="5" fill="#ffffff" stroke="rgb(3 39 16 / 0.14)" />
+            <rect x="33" y="56" width="54" height="26" fill="#032710" />
+            <circle cx="60" cy="69" r="6.5" fill="#F67A06" />
+          </g>
+        )}
+        {shape === 'pouch' && (
+          <g>
+            <path d="M38 22h44l3 72a7 7 0 0 1-7 7H42a7 7 0 0 1-7-7Z" fill="#ffffff" stroke="rgb(3 39 16 / 0.14)" />
+            <rect x="38" y="22" width="44" height="7" fill="#032710" />
+            <rect x="36.6" y="54" width="46.8" height="27" fill="#032710" />
+            <circle cx="60" cy="67.5" r="6.5" fill="#F67A06" />
+          </g>
+        )}
+      </svg>
+    ) : (
+      <Picture
+        class="pv-photo"
+        src={image}
+        alt={alt}
+        widths={widths}
+        sizes={size === 'lg' ? '(min-width: 900px) 420px, 80vw' : size === 'md' ? '(min-width: 600px) 240px, 112px' : '64px'}
+        formats={['avif', 'webp']}
+        loading={eager ? 'eager' : 'lazy'}
+      />
+    )
+  }
+</div>
+
+<style>
+  .pv {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    width: 100%;
+    isolation: isolate;
+  }
+
+  .pv::before {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    z-index: -1;
+    border-radius: 50%;
+    background: var(--disc);
+  }
+
+  .pv-art,
+  .pv-photo,
+  .pv :global(img) {
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
+  }
+
+  .pv-sm::before {
+    inset: 4%;
+  }
+</style>

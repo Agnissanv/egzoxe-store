@@ -1,0 +1,264 @@
+---
+import { Image } from 'astro:assets';
+import wordmark from '../assets/brand/wordmark.png';
+import Icon from './Icon.astro';
+import { t, type Lang } from '../lib/i18n';
+import { route, type RouteKey } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+  alternate: Record<Lang, string>;
+  current?: RouteKey;
+}
+const { lang, alternate, current } = Astro.props;
+const d = t(lang);
+
+const links: RouteKey[] = ['home', 'shop', 'blog', 'about', 'contact'];
+---
+
+<header class="site-header on-dark">
+  <div class="container header-inner">
+    <a class="brand" href={route('home', lang)} aria-label={d.a11y.home}>
+      <Image src={wordmark} alt="" height={34} densities={[1, 2]} loading="eager" decoding="async" />
+    </a>
+
+    <nav class="nav-desktop" aria-label={d.a11y.mainNav}>
+      <ul role="list">
+        {
+          links.map((key) => (
+            <li>
+              <a href={route(key, lang)} aria-current={current === key ? 'page' : undefined}>
+                {d.nav[key]}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-switch" role="group" aria-label={d.a11y.langSwitch}>
+        <a href={alternate.fr} lang="fr" hreflang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a>
+        <span aria-hidden="true">|</span>
+        <a href={alternate.en} lang="en" hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+      </div>
+
+      <a class="cart-link" href={route('cart', lang)} data-cart-link data-label={d.a11y.cart} data-items={d.a11y.cartItems}>
+        <Icon name="bag" size={24} />
+        <span class="visually-hidden" data-cart-sr>{d.a11y.cart}</span>
+        <span class="cart-count" data-cart-count hidden>0</span>
+      </a>
+
+      <details class="nav-mobile">
+        <summary aria-label={d.a11y.menu}>
+          <Icon name="menu" size={24} />
+        </summary>
+        <nav class="nav-mobile-panel" aria-label={d.a11y.mainNav}>
+          <ul role="list">
+            {
+              links.map((key) => (
+                <li>
+                  <a href={route(key, lang)} aria-current={current === key ? 'page' : undefined}>
+                    {d.nav[key]}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <a href={route('bundles', lang)}>{d.nav.bundles}</a>
+            </li>
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid rgb(255 249 240 / 0.08);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 64px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-right: auto;
+  }
+
+  .brand img {
+    height: 30px;
+    width: auto;
+  }
+
+  .nav-desktop {
+    display: none;
+  }
+
+  .nav-desktop ul {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+  }
+
+  .nav-desktop a,
+  .nav-mobile-panel a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: var(--pill);
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: 0.9688rem;
+    text-decoration: none;
+  }
+
+  .nav-desktop a:hover {
+    background: rgb(255 249 240 / 0.08);
+  }
+
+  .nav-desktop a[aria-current='page'] {
+    color: var(--green-night);
+    background: var(--cream);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-family: var(--font-head);
+    font-size: 0.875rem;
+    color: var(--on-dark-muted);
+  }
+
+  .lang-switch a {
+    display: inline-grid;
+    place-items: center;
+    min-width: 36px;
+    min-height: 44px;
+    text-decoration: none;
+    color: var(--on-dark-muted);
+  }
+
+  .lang-switch a[aria-current='true'] {
+    color: var(--cream);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--orange);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+
+  .cart-link {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+
+  .cart-link:hover {
+    background: rgb(255 249 240 / 0.08);
+  }
+
+  .cart-count {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    min-width: 21px;
+    height: 21px;
+    padding: 0 5px;
+    border-radius: var(--pill);
+    background: var(--orange);
+    color: var(--green-night);
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 21px;
+    text-align: center;
+  }
+
+  .cart-count[hidden] {
+    display: none;
+  }
+
+  .nav-mobile summary {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .nav-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-mobile[open] summary {
+    background: rgb(255 249 240 / 0.1);
+  }
+
+  .nav-mobile-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    padding: 8px var(--gutter) 20px;
+    background: var(--green-night);
+    border-bottom: 1px solid rgb(255 249 240 / 0.12);
+    box-shadow: 0 16px 32px rgb(0 0 0 / 0.25);
+  }
+
+  .nav-mobile-panel ul {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .nav-mobile-panel a {
+    width: 100%;
+    font-size: 1.0625rem;
+  }
+
+  .nav-mobile-panel a[aria-current='page'] {
+    color: var(--orange);
+  }
+
+  @media (min-width: 900px) {
+    .nav-desktop {
+      display: block;
+    }
+
+    .nav-mobile {
+      display: none;
+    }
+
+    .brand img {
+      height: 34px;
+    }
+
+    .header-inner {
+      min-height: 72px;
+    }
+  }
+</style>

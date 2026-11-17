@@ -1,0 +1,11 @@
+---
+// Affiche un texte ; s'il est entièrement [entre crochets], il est marqué « à compléter ».
+import { isTodo } from '../lib/format';
+
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+{isTodo(text) ? <span class="todo">{text}</span> : text}

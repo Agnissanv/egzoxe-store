@@ -1,0 +1,53 @@
+{
+  "slug": {
+    "fr": "confort-digestif",
+    "en": "confort-digestif"
+  },
+  "need": "digestion",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Confort Digestif",
+    "en": "Digestive Comfort"
+  },
+  "variants": [
+    {
+      "id": "30",
+      "label": {
+        "fr": "30 capsules",
+        "en": "30 capsules"
+      },
+      "price": 8000
+    },
+    {
+      "id": "60",
+      "label": {
+        "fr": "60 capsules",
+        "en": "60 capsules"
+      },
+      "price": 13500
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Pour ton confort digestif",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "For your digestive comfort",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": true,
+  "isPlaceholder": true
+}

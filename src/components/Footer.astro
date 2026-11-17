@@ -1,0 +1,235 @@
+---
+import { Image } from 'astro:assets';
+import logoFull from '../assets/brand/logo-full.png';
+import Icon from './Icon.astro';
+import site from '../data/site.json';
+import { t, type Lang } from '../lib/i18n';
+import { route } from '../lib/routes';
+import { waLink } from '../lib/format';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const trackUrl = waLink(site.whatsappNumber, d.message.track);
+---
+
+<footer class="site-footer on-dark">
+  <section class="newsletter container" aria-labelledby="newsletter-title">
+    <div class="newsletter-text">
+      <h2 id="newsletter-title">{d.newsletter.title}</h2>
+      <p>{d.newsletter.text}</p>
+    </div>
+    <form class="newsletter-form" data-newsletter novalidate>
+      <label class="visually-hidden" for="newsletter-email">{d.newsletter.email}</label>
+      <input class="input" id="newsletter-email" name="email" type="email" autocomplete="email" placeholder={d.newsletter.email} required />
+      <button class="btn btn-primary" type="submit">{d.buttons.subscribe}</button>
+      <p class="newsletter-note" data-newsletter-note role="status" hidden>{d.newsletter.pending}</p>
+    </form>
+  </section>
+
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Image src={logoFull} alt={d.meta.siteName} width={150} densities={[1, 2]} />
+      <p>{d.footer.city}</p>
+    </div>
+
+    <nav aria-label={d.a11y.footerNav}>
+      <ul role="list" class="footer-links">
+        <li><a href={route('shop', lang)}>{d.nav.shop}</a></li>
+        <li><a href={route('bundles', lang)}>{d.nav.bundles}</a></li>
+        <li><a href={route('faq', lang)}>{d.nav.faq}</a></li>
+        <li><a href={route('reviews', lang)}>{d.nav.reviews}</a></li>
+        <li><a href={route('delivery', lang)}>{d.nav.delivery}</a></li>
+        <li><a href={route('legal', lang)}>{d.nav.legal}</a></li>
+        <li><a href={trackUrl} target="_blank" rel="noopener">{d.nav.trackOrder}</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer-col">
+      <p class="footer-label">{d.footer.follow}</p>
+      <a class="social" href={site.tiktokUrl} target="_blank" rel="noopener">
+        <Icon name="tiktok" size={18} />
+        <span>TikTok {site.tiktokHandle}</span>
+      </a>
+      <a class="social" href={waLink(site.whatsappNumber, d.message.hello)} target="_blank" rel="noopener">
+        <Icon name="whatsapp" size={18} />
+        <span>{site.whatsappDisplay}</span>
+      </a>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-label">{d.footer.brandsTitle}</p>
+      <ul role="list" class="brand-slots">
+        {d.footer.brandsPlaceholder.map((label) => <li class="todo">{label}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p class="footer-health">{d.footer.healthNote}</p>
+    <p class="footer-legal">
+      <span>{d.footer.rights}</span>
+      <span aria-hidden="true">·</span>
+      <a href={site.agencyUrl} target="_blank" rel="noopener">{d.footer.madeBy}</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = form.querySelector('input');
+      if (input && !input.checkValidity()) {
+        input.reportValidity();
+        return;
+      }
+      const note = form.querySelector<HTMLElement>('[data-newsletter-note]');
+      if (note) note.hidden = false;
+    });
+  });
+</script>
+
+<style>
+  .site-footer {
+    padding-top: 56px;
+    /* Laisse de la place au bouton WhatsApp flottant */
+    padding-bottom: calc(var(--wa-size) + 40px);
+  }
+
+  .newsletter {
+    display: grid;
+    gap: 18px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgb(255 249 240 / 0.12);
+  }
+
+  .newsletter h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .newsletter-text p {
+    margin-top: 6px;
+    color: var(--on-dark-muted);
+  }
+
+  .newsletter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .newsletter-form .input {
+    flex: 1 1 220px;
+    border-color: transparent;
+  }
+
+  .newsletter-form .btn {
+    flex: 0 0 auto;
+  }
+
+  .newsletter-note {
+    flex-basis: 100%;
+    color: var(--on-dark-muted);
+    font-size: var(--fs-small);
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 32px;
+    padding-block: 40px;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    color: var(--on-dark-muted);
+    font-size: var(--fs-small);
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 16px;
+  }
+
+  .footer-links a,
+  .social {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    text-decoration: none;
+  }
+
+  .footer-links a:hover,
+  .social:hover {
+    text-decoration: underline;
+  }
+
+  .footer-col {
+    display: grid;
+    gap: 4px;
+    align-content: start;
+  }
+
+  .footer-label {
+    font-family: var(--font-head);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .brand-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .brand-slots li {
+    padding: 10px 12px;
+    border: 1px dashed rgb(255 249 240 / 0.35);
+    border-radius: var(--radius-s);
+    font-size: var(--fs-small);
+  }
+
+  .footer-bottom {
+    display: grid;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 249 240 / 0.12);
+    font-size: var(--fs-small);
+    color: var(--on-dark-muted);
+  }
+
+  .footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (min-width: 720px) {
+    .newsletter {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    }
+
+    .footer-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

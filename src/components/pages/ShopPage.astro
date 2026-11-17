@@ -1,0 +1,307 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../ProductCard.astro';
+import Icon from '../Icon.astro';
+import site from '../../data/site.json';
+import { getProducts, needColor, NEED_ORDER } from '../../lib/catalog';
+import { fill, t, type Lang } from '../../lib/i18n';
+import { route, routePair } from '../../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const products = await getProducts();
+---
+
+<BaseLayout lang={lang} title={d.meta.shopTitle} description={d.meta.shopDescription} alternate={routePair('shop')} current="shop">
+  <section class="shop-head">
+    <div class="container">
+      <h1>{d.shop.title}</h1>
+      <p class="section-lead">{d.shop.intro}</p>
+    </div>
+  </section>
+
+  <section class="container shop-body" aria-label={d.shop.title}>
+    <form class="filters" data-shop-filters aria-label={d.a11y.filters} role="search">
+      <div class="search">
+        <label class="visually-hidden" for="shop-search">{d.shop.search}</label>
+        <Icon name="search" size={20} />
+        <input class="input" id="shop-search" name="q" type="search" placeholder={d.shop.searchPlaceholder} autocomplete="off" />
+      </div>
+
+      <fieldset class="filter-group">
+        <legend>{d.shop.need}</legend>
+        <div class="pills">
+          <label class="pill">
+            <input type="radio" name="need" value="" checked />
+            <span>{d.shop.all}</span>
+          </label>
+          {
+            NEED_ORDER.map((need) => (
+              <label class="pill">
+                <input type="radio" name="need" value={need} />
+                <span>
+                  <i class="need-dot" style={`--dot: ${needColor(need)}`} />
+                  {d.needs[need].label}
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend>{d.shop.brand}</legend>
+        <div class="pills">
+          <label class="pill">
+            <input type="radio" name="brand" value="" checked />
+            <span>{d.shop.all}</span>
+          </label>
+          {
+            site.brands.map((brand) => (
+              <label class="pill">
+                <input type="radio" name="brand" value={brand} />
+                <span>{brand}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+    </form>
+
+    <p class="count" data-shop-count data-template={d.shop.count} aria-live="polite">
+      {fill(d.shop.count, { n: products.length })}
+    </p>
+
+    <div class="product-grid" data-shop-grid>
+      {products.map((product) => <ProductCard product={product} lang={lang} />)}
+    </div>
+
+    <div class="empty" data-shop-empty hidden>
+      <p>{d.shop.noResults}</p>
+      <button class="btn btn-outline btn-sm" type="button" data-shop-reset>{d.shop.reset}</button>
+    </div>
+
+    <aside class="bundles-banner on-dark">
+      <p>{d.shop.bundlesBanner}</p>
+      <a class="btn btn-primary" href={route('bundles', lang)}>{d.buttons.seeBundles}</a>
+    </aside>
+  </section>
+</BaseLayout>
+
+<script>
+  // Filtres côté navigateur : besoin, marque, recherche. L'état est gardé dans l'adresse (?need=…).
+  const form = document.querySelector<HTMLFormElement>('[data-shop-filters]');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-product-card]')];
+  const count = document.querySelector<HTMLElement>('[data-shop-count]');
+  const empty = document.querySelector<HTMLElement>('[data-shop-empty]');
+  const reset = document.querySelector<HTMLButtonElement>('[data-shop-reset]');
+
+  const normalize = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '');
+
+  function apply(updateUrl = true) {
+    if (!form) return;
+    const data = new FormData(form);
+    const need = String(data.get('need') ?? '');
+    const brand = String(data.get('brand') ?? '');
+    const q = normalize(String(data.get('q') ?? '').trim());
+    let visible = 0;
+    for (const card of cards) {
+      const show =
+        (!need || card.dataset.need === need) &&
+        (!brand || card.dataset.brand === brand) &&
+        (!q || normalize(card.dataset.search ?? '').includes(q));
+      card.hidden = !show;
+      if (show) visible++;
+    }
+    if (count) count.textContent = (count.dataset.template ?? '{n}').replace('{n}', String(visible));
+    if (empty) empty.hidden = visible > 0;
+    if (updateUrl) {
+      const params = new URLSearchParams();
+      if (need) params.set('need', need);
+      if (brand) params.set('brand', brand);
+      if (q) params.set('q', String(data.get('q')));
+      const query = params.toString();
+      history.replaceState(null, '', query ? `?${query}` : location.pathname);
+    }
+  }
+
+  function setRadio(name: string, value: string) {
+    const input = form?.querySelector<HTMLInputElement>(`input[name="${name}"][value="${CSS.escape(value)}"]`);
+    if (input) input.checked = true;
+  }
+
+  if (form) {
+    const params = new URLSearchParams(location.search);
+    setRadio('need', params.get('need') ?? '');
+    setRadio('brand', params.get('brand') ?? '');
+    const search = form.querySelector<HTMLInputElement>('input[name="q"]');
+    if (search) search.value = params.get('q') ?? '';
+    apply(false);
+
+    form.addEventListener('input', () => apply());
+    form.addEventListener('change', () => apply());
+    form.addEventListener('submit', (event) => event.preventDefault());
+    reset?.addEventListener('click', () => {
+      form.reset();
+      apply();
+    });
+  }
+</script>
+
+<style>
+  .shop-head {
+    padding-top: 40px;
+    padding-bottom: 8px;
+  }
+
+  .shop-head h1 {
+    font-size: var(--fs-h1);
+    margin-bottom: 8px;
+  }
+
+  .shop-body {
+    padding-bottom: 64px;
+  }
+
+  .filters {
+    display: grid;
+    gap: 16px;
+    margin: 20px 0 18px;
+  }
+
+  .search {
+    position: relative;
+    max-width: 420px;
+  }
+
+  .search :global(svg) {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-muted);
+    pointer-events: none;
+  }
+
+  .search .input {
+    padding-left: 44px;
+  }
+
+  .filter-group {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .filter-group legend {
+    margin-bottom: 8px;
+    padding: 0;
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: var(--fs-small);
+    color: var(--ink-muted);
+  }
+
+  /* Sur téléphone, les pastilles défilent horizontalement au lieu de s'empiler. */
+  .filter-group .pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 3px var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .filter-group .pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pill {
+    flex: none;
+  }
+
+  .pill .need-dot {
+    font-style: normal;
+  }
+
+  .count {
+    margin-bottom: 14px;
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+  }
+
+  .product-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (min-width: 600px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .filter-group .pills {
+      flex-wrap: wrap;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .filters {
+      grid-template-columns: auto auto;
+      justify-content: start;
+      column-gap: 40px;
+    }
+
+    .search {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1160px) {
+    .product-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .empty {
+    display: grid;
+    justify-items: start;
+    gap: 12px;
+    padding: 24px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px dashed var(--line);
+  }
+
+  .bundles-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 40px;
+    padding: 22px 24px;
+    border-radius: var(--radius-l);
+  }
+
+  .bundles-banner p {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.1875rem;
+  }
+</style>

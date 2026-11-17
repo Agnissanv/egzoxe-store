@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
+import site from '../../data/site.json';
+import { t, type Lang } from '../../lib/i18n';
+import { route, routePair, type RouteKey } from '../../lib/routes';
+import { waLink } from '../../lib/format';
+
+interface Props {
+  lang: Lang;
+  page: Exclude<RouteKey, 'home' | 'shop' | 'bundles' | 'cart'>;
+}
+const { lang, page } = Astro.props;
+const d = t(lang);
+const title = d.nav[page];
+---
+
+<BaseLayout lang={lang} title={title} description={d.comingSoon.text} alternate={routePair(page)} current={page}>
+  <section class="container soon">
+    <span class="chip-example">{d.comingSoon.badge}</span>
+    <h1>{title}</h1>
+    <p class="section-lead">{d.comingSoon.text}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href={route('shop', lang)}>{d.buttons.goShop}</a>
+      <a class="btn btn-outline" href={waLink(site.whatsappNumber, d.message.hello)} target="_blank" rel="noopener">
+        <Icon name="whatsapp" size={20} />
+        {d.buttons.writeWhatsapp}
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .soon {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+    padding-top: 56px;
+    padding-bottom: 96px;
+    max-width: 44rem;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+</style>

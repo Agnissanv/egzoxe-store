@@ -1,0 +1,45 @@
+{
+  "slug": {
+    "fr": "vitamine-c-plus",
+    "en": "vitamine-c-plus"
+  },
+  "need": "immunity",
+  "brand": "Marque B",
+  "name": {
+    "fr": "Vitamine C+",
+    "en": "Vitamin C+"
+  },
+  "variants": [
+    {
+      "id": "60",
+      "label": {
+        "fr": "60 gélules",
+        "en": "60 capsules"
+      },
+      "price": 6500
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Contribue à soutenir tes défenses naturelles",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "Helps support your natural defenses",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

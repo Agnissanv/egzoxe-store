@@ -1,0 +1,53 @@
+{
+  "slug": {
+    "fr": "defense-plus",
+    "en": "defense-plus"
+  },
+  "need": "immunity",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Défense Plus",
+    "en": "Defense Plus"
+  },
+  "variants": [
+    {
+      "id": "30",
+      "label": {
+        "fr": "30 capsules",
+        "en": "30 capsules"
+      },
+      "price": 8500
+    },
+    {
+      "id": "60",
+      "label": {
+        "fr": "60 capsules",
+        "en": "60 capsules"
+      },
+      "price": 14000
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Contribue à soutenir tes défenses naturelles",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "Helps support your natural defenses",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": true,
+  "isPlaceholder": true
+}

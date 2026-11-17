@@ -1,0 +1,186 @@
+---
+import ProductVisual from './ProductVisual.astro';
+import Txt from './Txt.astro';
+import { defaultVariant, minPrice, needColor, type Product } from '../lib/catalog';
+import { formatPrice } from '../lib/format';
+import { t, type Lang } from '../lib/i18n';
+import { productPath } from '../lib/routes';
+
+interface Props {
+  product: Product;
+  lang: Lang;
+}
+const { product, lang } = Astro.props;
+const d = t(lang);
+const p = product.data;
+const url = productPath(p.slug, lang);
+const variant = defaultVariant(product);
+const many = p.variants.length > 1;
+const name = p.name[lang];
+const search = `${p.name.fr} ${p.name.en} ${p.brand}`.toLowerCase();
+---
+
+<article class="pcard" data-product-card data-need={p.need} data-brand={p.brand} data-search={search}>
+  <a class="pcard-media" href={url} tabindex="-1" aria-hidden="true">
+    <ProductVisual product={product} />
+  </a>
+  <div class="pcard-body">
+    <p class="pcard-meta">
+      <span class="need-dot" style={`--dot: ${needColor(p.need)}`}></span>
+      <span>{d.needs[p.need].label}</span>
+      <span aria-hidden="true">·</span>
+      <span>{p.brand}</span>
+    </p>
+    <h3 class="pcard-title"><a href={url}>{name}</a></h3>
+    <p class="pcard-price">
+      {many && <span class="from">{d.product.from} </span>}
+      <span class="price">{formatPrice(many ? minPrice(product) : variant.price)}</span>
+    </p>
+    <dl class="pcard-info">
+      <div>
+        <dt>{d.product.duration}</dt>
+        <dd><Txt text={p.duration[lang]} /></dd>
+      </div>
+      <div>
+        <dt>{d.product.directions}</dt>
+        <dd><Txt text={p.directions[lang]} /></dd>
+      </div>
+    </dl>
+    <div class="pcard-actions">
+      <button
+        class="btn btn-primary btn-sm"
+        type="button"
+        data-add-to-cart
+        data-id={product.id}
+        data-variant={variant.id}
+        data-name={`${name} (${variant.label[lang]})`}
+      >
+        {d.buttons.addToCart}
+      </button>
+      <a class="pcard-more" href={url}>{d.buttons.learnMore}<span class="visually-hidden">, {name}</span></a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .pcard-media {
+    align-self: start;
+  }
+
+  .pcard-body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+    align-content: start;
+  }
+
+  .pcard-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-muted);
+    font-size: var(--fs-caption);
+  }
+
+  .pcard-title {
+    font-size: var(--fs-h3);
+    line-height: 1.25;
+  }
+
+  .pcard-title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .pcard-title a:hover {
+    text-decoration: underline;
+  }
+
+  .pcard-price {
+    font-size: 1.125rem;
+  }
+
+  .from {
+    font-size: var(--fs-small);
+    color: var(--ink-muted);
+  }
+
+  .pcard-info {
+    display: grid;
+    gap: 4px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--line);
+    font-size: var(--fs-caption);
+  }
+
+  .pcard-info div {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .pcard-info dt {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .pcard-info dt::after {
+    content: '\00a0:';
+  }
+
+  :global(html[lang='en']) .pcard-info dt::after {
+    content: ':';
+  }
+
+  .pcard-info dd {
+    color: var(--ink-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pcard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 14px;
+    margin-top: 6px;
+  }
+
+  .pcard-more {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: var(--fs-small);
+    color: var(--green-leaf);
+  }
+
+  @media (min-width: 600px) {
+    .pcard {
+      grid-template-columns: 1fr;
+      padding: 16px 16px 18px;
+    }
+
+    .pcard-media {
+      padding: 4px 10% 0;
+    }
+
+    .pcard-actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

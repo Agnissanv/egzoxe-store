@@ -1,0 +1,45 @@
+{
+  "slug": {
+    "fr": "tisane-detox",
+    "en": "tisane-detox"
+  },
+  "need": "detox",
+  "brand": "Marque B",
+  "name": {
+    "fr": "Tisane Détox",
+    "en": "Detox Tea"
+  },
+  "variants": [
+    {
+      "id": "20",
+      "label": {
+        "fr": "20 sachets",
+        "en": "20 sachets"
+      },
+      "price": 5000
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Un coup de pouce à ton équilibre au quotidien",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "A boost for your daily balance",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

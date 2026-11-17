@@ -1,0 +1,53 @@
+{
+  "slug": {
+    "fr": "detox-equilibre",
+    "en": "detox-equilibre"
+  },
+  "need": "detox",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Détox Équilibre",
+    "en": "Detox Balance"
+  },
+  "variants": [
+    {
+      "id": "30",
+      "label": {
+        "fr": "30 capsules",
+        "en": "30 capsules"
+      },
+      "price": 9000
+    },
+    {
+      "id": "60",
+      "label": {
+        "fr": "60 capsules",
+        "en": "60 capsules"
+      },
+      "price": 15500
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Un coup de pouce à ton équilibre au quotidien",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "A boost for your daily balance",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": true,
+  "isPlaceholder": true
+}

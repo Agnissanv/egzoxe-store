@@ -1,0 +1,45 @@
+{
+  "slug": {
+    "fr": "fibres-douces",
+    "en": "fibres-douces"
+  },
+  "need": "digestion",
+  "brand": "Marque B",
+  "name": {
+    "fr": "Fibres Douces",
+    "en": "Gentle Fibers"
+  },
+  "variants": [
+    {
+      "id": "250g",
+      "label": {
+        "fr": "250 g",
+        "en": "250 g"
+      },
+      "price": 9500
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Pour ton confort digestif",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "For your digestive comfort",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

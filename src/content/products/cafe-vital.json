@@ -1,0 +1,53 @@
+{
+  "slug": {
+    "fr": "cafe-vital",
+    "en": "cafe-vital"
+  },
+  "need": "energy",
+  "brand": "Marque B",
+  "name": {
+    "fr": "Café Vital",
+    "en": "Vital Coffee"
+  },
+  "variants": [
+    {
+      "id": "200g",
+      "label": {
+        "fr": "200 g",
+        "en": "200 g"
+      },
+      "price": 11500
+    },
+    {
+      "id": "400g",
+      "label": {
+        "fr": "400 g",
+        "en": "400 g"
+      },
+      "price": 20000
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Soutient ton énergie au fil de la journée",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "Supports your energy through the day",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

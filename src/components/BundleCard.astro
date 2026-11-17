@@ -1,0 +1,136 @@
+---
+import ProductVisual from './ProductVisual.astro';
+import { bundleProducts, needColor, type Bundle, type Product } from '../lib/catalog';
+import { formatPrice } from '../lib/format';
+import { t, type Lang } from '../lib/i18n';
+import { productPath } from '../lib/routes';
+
+interface Props {
+  bundle: Bundle;
+  products: Product[];
+  lang: Lang;
+}
+const { bundle, products, lang } = Astro.props;
+const d = t(lang);
+const b = bundle.data;
+const items = bundleProducts(bundle, products);
+const name = b.name[lang];
+---
+
+<article class="bcard">
+  <div class="bcard-visual" aria-hidden="true">
+    {
+      items.slice(0, 3).map(({ product }) => (
+        <div class="bcard-item">
+          <ProductVisual product={product} size="sm" />
+        </div>
+      ))
+    }
+  </div>
+  <div class="bcard-body">
+    <p class="bcard-meta">
+      <span class="need-dot" style={`--dot: ${needColor(b.need)}`}></span>
+      <span>{d.needs[b.need].label}</span>
+    </p>
+    <h3 class="bcard-title">{name}</h3>
+    <p class="bcard-label">{d.bundles.contains}</p>
+    <ul class="bcard-list" role="list">
+      {
+        items.map(({ product, variant }) => (
+          <li>
+            <a href={productPath(product.data.slug, lang)}>{product.data.name[lang]}</a>
+            <span> · {variant.label[lang]}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="bcard-price">
+      <span class="price">{formatPrice(b.price)}</span>
+      {
+        b.regularPrice && b.regularPrice > b.price && (
+          <span class="regular">
+            {d.bundles.insteadOf} <s>{formatPrice(b.regularPrice)}</s>
+          </span>
+        )
+      }
+    </p>
+    <button class="btn btn-primary btn-block" type="button" data-add-to-cart data-id={bundle.id} data-variant="" data-name={name}>
+      {d.buttons.addToCart}
+    </button>
+  </div>
+</article>
+
+<style>
+  .bcard {
+    display: grid;
+    gap: 16px;
+    padding: 18px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .bcard-visual {
+    display: flex;
+    justify-content: center;
+    padding-top: 4px;
+  }
+
+  .bcard-item {
+    width: 96px;
+  }
+
+  .bcard-item + .bcard-item {
+    margin-left: -22px;
+  }
+
+  .bcard-body {
+    display: grid;
+    gap: 8px;
+  }
+
+  .bcard-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-muted);
+    font-size: var(--fs-caption);
+  }
+
+  .bcard-title {
+    font-size: 1.25rem;
+  }
+
+  .bcard-label {
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: var(--fs-small);
+  }
+
+  .bcard-list {
+    display: grid;
+    gap: 2px;
+    font-size: var(--fs-small);
+    color: var(--ink-muted);
+  }
+
+  .bcard-list a {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .bcard-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+    margin: 4px 0 6px;
+    font-size: 1.375rem;
+  }
+
+  .regular {
+    font-size: var(--fs-small);
+    color: var(--ink-muted);
+  }
+</style>

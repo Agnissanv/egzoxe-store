@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BundleCard from '../BundleCard.astro';
+import Icon from '../Icon.astro';
+import { getBundles, getProducts } from '../../lib/catalog';
+import { t, type Lang } from '../../lib/i18n';
+import { route, routePair } from '../../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const products = await getProducts();
+const bundles = await getBundles();
+---
+
+<BaseLayout lang={lang} title={d.meta.bundlesTitle} description={d.meta.bundlesDescription} alternate={routePair('bundles')} current="shop">
+  <section class="container page">
+    <nav class="crumbs" aria-label={d.a11y.breadcrumb}>
+      <ol role="list">
+        <li><a href={route('shop', lang)}>{d.nav.shop}</a></li>
+        <li aria-current="page">{d.bundles.title}</li>
+      </ol>
+    </nav>
+    <div class="section-head">
+      <h1>{d.bundles.title}</h1>
+      <p class="section-lead">{d.bundles.intro}</p>
+    </div>
+    <div class="bundle-grid">
+      {bundles.map((bundle) => <BundleCard bundle={bundle} products={products} lang={lang} />)}
+    </div>
+    <div class="section-foot">
+      <a class="link-arrow" href={route('shop', lang)}>
+        {d.buttons.seeShop}
+        <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-bottom: 72px;
+  }
+
+  .crumbs {
+    padding: 18px 0 20px;
+    font-size: var(--fs-small);
+  }
+
+  .crumbs ol {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    color: var(--ink-muted);
+  }
+
+  .crumbs li + li::before {
+    content: '›';
+    margin-right: 6px;
+  }
+
+  .crumbs a {
+    color: var(--ink);
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+  }
+
+  .bundle-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 720px) {
+    .bundle-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .bundle-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

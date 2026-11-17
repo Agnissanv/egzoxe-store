@@ -1,0 +1,45 @@
+{
+  "slug": {
+    "fr": "boost-plantes",
+    "en": "boost-plantes"
+  },
+  "need": "energy",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Boost Plantes",
+    "en": "Plant Boost"
+  },
+  "variants": [
+    {
+      "id": "60",
+      "label": {
+        "fr": "60 gélules",
+        "en": "60 capsules"
+      },
+      "price": 10500
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Soutient ton énergie au fil de la journée",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "Supports your energy through the day",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

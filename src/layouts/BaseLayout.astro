@@ -1,0 +1,184 @@
+---
+import '@fontsource/poppins/latin-500.css';
+import '@fontsource/poppins/latin-700.css';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '../styles/global.css';
+
+import AnnouncementBar from '../components/AnnouncementBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import { t, type Lang } from '../lib/i18n';
+import { route, withBase, type RouteKey } from '../lib/routes';
+import { waLink } from '../lib/format';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  alternate: Record<Lang, string>;
+  current?: RouteKey;
+  /** Masque le bouton WhatsApp flottant (page panier : l'action principale est déjà WhatsApp). */
+  hideWhatsApp?: boolean;
+}
+
+const { lang, title, description, alternate, current, hideWhatsApp = false } = Astro.props;
+const d = t(lang);
+const siteUrl = Astro.site ?? new URL('https://egzoxe.com');
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const abs = (path: string) => new URL(path, siteUrl).href;
+const fullTitle = title === d.meta.homeTitle ? title : `${title} · ${d.meta.siteName}`;
+// Aperçu (GitHub Pages) : on demande aux moteurs de ne pas indexer la maquette.
+const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="fr" href={abs(alternate.fr)} />
+    <link rel="alternate" hreflang="en" href={abs(alternate.en)} />
+    <link rel="alternate" hreflang="x-default" href={abs(alternate.fr)} />
+    <meta name="theme-color" content="#032710" />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="any" />
+    <link rel="icon" type="image/png" href={withBase('/favicon-32.png')} sizes="32x32" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={d.meta.siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_CI' : 'en_US'} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{d.a11y.skip}</a>
+    <AnnouncementBar lang={lang} />
+    <Header lang={lang} alternate={alternate} current={current} />
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+
+    {
+      !hideWhatsApp && (
+        <a class="wa-float" href={waLink(site.whatsappNumber, d.message.hello)} target="_blank" rel="noopener" aria-label={d.a11y.whatsapp}>
+          <Icon name="whatsapp" size={28} />
+        </a>
+      )
+    }
+
+    <div class="toast" data-toast data-added={d.toast.added} data-sep={d.message.lineSep} role="status" aria-live="polite" hidden>
+      <Icon name="check" size={20} />
+      <span data-toast-text></span>
+      <a href={route('cart', lang)}>{d.buttons.seeCart}</a>
+    </div>
+
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+
+  .wa-float {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    width: var(--wa-size);
+    height: var(--wa-size);
+    border-radius: 50%;
+    background: #25d366;
+    color: #ffffff;
+    box-shadow:
+      0 0 0 3px var(--cream),
+      0 8px 20px rgb(3 39 16 / 0.28);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .wa-float:hover {
+    transform: scale(1.05);
+  }
+
+  /* Glisse sur le bord quand il recouvrirait un bouton : seule une languette reste visible. */
+  .wa-float:global(.is-tucked) {
+    transform: translateX(calc(var(--wa-size) + 2px));
+    opacity: 0.92;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(16px + var(--wa-size) + 12px);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: min(calc(100% - 32px), 460px);
+    padding: 12px 16px;
+    border-radius: var(--radius-m);
+    background: var(--green-night);
+    color: var(--cream);
+    box-shadow: 0 12px 32px rgb(3 39 16 / 0.3);
+    font-size: var(--fs-small);
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .toast :global(svg) {
+    flex: none;
+    color: var(--green-bright);
+  }
+
+  .toast span {
+    flex: 1;
+  }
+
+  .toast a {
+    flex: none;
+    color: var(--orange);
+    font-family: var(--font-head);
+    font-weight: 500;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .toast:global(.is-visible) {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (min-width: 900px) {
+    .toast {
+      left: auto;
+      right: calc(16px + var(--wa-size) + 16px);
+      bottom: 20px;
+      transform: translateY(8px);
+    }
+
+    .toast:global(.is-visible) {
+      transform: translateY(0);
+    }
+  }
+</style>

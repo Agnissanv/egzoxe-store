@@ -1,0 +1,447 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductVisual from '../ProductVisual.astro';
+import ProductCard from '../ProductCard.astro';
+import Icon from '../Icon.astro';
+import Txt from '../Txt.astro';
+import site from '../../data/site.json';
+import { defaultVariant, getProducts, needColor, type Product } from '../../lib/catalog';
+import { formatPrice } from '../../lib/format';
+import { t, type Lang } from '../../lib/i18n';
+import { productPath, route } from '../../lib/routes';
+
+interface Props {
+  lang: Lang;
+  product: Product;
+}
+const { lang, product } = Astro.props;
+const d = t(lang);
+const p = product.data;
+const name = p.name[lang];
+const selected = defaultVariant(product);
+const many = p.variants.length > 1;
+const related = (await getProducts()).filter((x) => x.data.need === p.need && x.id !== product.id).slice(0, 4);
+const sep = d.message.lineSep;
+const description = p.benefits[lang].filter((b) => !b.startsWith('[')).join('. ');
+---
+
+<BaseLayout
+  lang={lang}
+  title={name}
+  description={description || d.meta.shopDescription}
+  alternate={{ fr: productPath(p.slug, 'fr'), en: productPath(p.slug, 'en') }}
+  current="shop"
+>
+  <div class="container">
+    <nav class="crumbs" aria-label={d.a11y.breadcrumb}>
+      <ol role="list">
+        <li><a href={route('shop', lang)}>{d.nav.shop}</a></li>
+        <li><a href={`${route('shop', lang)}?need=${p.need}`}>{d.needs[p.need].label}</a></li>
+        <li aria-current="page">{name}</li>
+      </ol>
+    </nav>
+
+    <article class="product" data-product>
+      <div class="product-visual">
+        <ProductVisual product={product} size="lg" eager alt={name} />
+      </div>
+
+      <div class="product-info">
+        <p class="product-meta">
+          <span class="need-dot" style={`--dot: ${needColor(p.need)}`}></span>
+          <span>{d.needs[p.need].label}</span>
+          <span aria-hidden="true">·</span>
+          <span>{d.product.brand}{sep}{p.brand}</span>
+        </p>
+        <h1>{name}</h1>
+        {
+          p.isPlaceholder && (
+            <p class="placeholder-note">
+              <span class="chip-example">{d.product.exampleBadge}</span>
+              {d.product.placeholderNote}
+            </p>
+          )
+        }
+
+        <p class="product-price">
+          <span class="price" data-price>{formatPrice(selected.price)}</span>
+        </p>
+
+        <h2 class="visually-hidden">{d.product.benefits}</h2>
+        <ul class="checks benefits" role="list">
+          {
+            p.benefits[lang].map((benefit) => (
+              <li>
+                <Icon name="check" size={20} />
+                <span>
+                  <Txt text={benefit} />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="buy">
+          {
+            many ? (
+              <fieldset class="variant-field">
+                <legend>{d.product.chooseSize}</legend>
+                <div class="pills">
+                  {p.variants.map((v) => (
+                    <label class="pill">
+                      <input
+                        type="radio"
+                        name="variant"
+                        value={v.id}
+                        checked={v.id === selected.id}
+                        data-price={formatPrice(v.price)}
+                        data-label={v.label[lang]}
+                      />
+                      <span>
+                        {v.label[lang]} · {formatPrice(v.price)}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            ) : (
+              <p class="single-variant">{selected.label[lang]}</p>
+            )
+          }
+
+          <div class="qty-row">
+            <label for="qty">{d.product.quantity}</label>
+            <div class="qty" data-qty>
+              <button type="button" class="qty-btn" data-step="-1" aria-label={d.a11y.decrease}>
+                <Icon name="minus" size={18} />
+              </button>
+              <input id="qty" class="qty-input" type="number" inputmode="numeric" min="1" max="99" value="1" />
+              <button type="button" class="qty-btn" data-step="1" aria-label={d.a11y.increase}>
+                <Icon name="plus" size={18} />
+              </button>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-primary btn-block add-btn"
+            type="button"
+            data-add-to-cart
+            data-id={product.id}
+            data-variant={selected.id}
+            data-name={`${name} (${selected.label[lang]})`}
+            data-base-name={name}
+            data-qty-source="#qty"
+          >
+            <Icon name="bag" size={20} />
+            {d.buttons.addToCart}
+          </button>
+        </div>
+
+        <dl class="usage">
+          <div>
+            <dt>{d.product.duration}</dt>
+            <dd><Txt text={p.duration[lang]} /></dd>
+          </div>
+          <div>
+            <dt>{d.product.directions}</dt>
+            <dd><Txt text={p.directions[lang]} /></dd>
+          </div>
+          {
+            p.ingredients && (
+              <div>
+                <dt>{d.product.ingredients}</dt>
+                <dd><Txt text={p.ingredients[lang]} /></dd>
+              </div>
+            )
+          }
+          {
+            p.precautions && (
+              <div>
+                <dt>{d.product.precautions}</dt>
+                <dd><Txt text={p.precautions[lang]} /></dd>
+              </div>
+            )
+          }
+        </dl>
+
+        <p class="health-note">
+          <Icon name="leaf" size={18} />
+          <span>{site.healthNote[lang]}</span>
+        </p>
+      </div>
+    </article>
+  </div>
+
+  {
+    related.length > 0 && (
+      <section class="section related" aria-labelledby="related-title">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-title" id="related-title">
+              {d.product.related}{sep}{d.needs[p.need].label}
+            </h2>
+          </div>
+          <div class="related-grid">
+            {related.map((r) => (
+              <ProductCard product={r} lang={lang} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-product]');
+  if (root) {
+    const price = root.querySelector<HTMLElement>('[data-price]');
+    const add = root.querySelector<HTMLButtonElement>('[data-add-to-cart]');
+    const qty = root.querySelector<HTMLInputElement>('#qty');
+
+    root.querySelectorAll<HTMLInputElement>('input[name="variant"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        if (!input.checked) return;
+        if (price && input.dataset.price) price.textContent = input.dataset.price;
+        if (add) {
+          add.dataset.variant = input.value;
+          add.dataset.name = `${add.dataset.baseName} (${input.dataset.label})`;
+        }
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!qty) return;
+        const next = (Number(qty.value) || 1) + Number(button.dataset.step);
+        qty.value = String(Math.max(1, Math.min(99, next)));
+      });
+    });
+
+    qty?.addEventListener('change', () => {
+      qty.value = String(Math.max(1, Math.min(99, Math.round(Number(qty.value)) || 1)));
+    });
+  }
+</script>
+
+<style>
+  .crumbs {
+    padding: 18px 0 8px;
+    font-size: var(--fs-small);
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    color: var(--ink-muted);
+  }
+
+  .crumbs li + li::before {
+    content: '›';
+    margin-right: 6px;
+    color: var(--ink-muted);
+  }
+
+  .crumbs a {
+    color: var(--ink);
+  }
+
+  .product {
+    display: grid;
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+
+  .product-visual {
+    max-width: 360px;
+    width: 82%;
+    margin-inline: auto;
+  }
+
+  .product-info {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+
+  .product-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+  }
+
+  .product-info h1 {
+    font-size: var(--fs-h1);
+  }
+
+  .placeholder-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+  }
+
+  .product-price {
+    font-size: 1.75rem;
+  }
+
+  .benefits {
+    padding: 4px 0;
+    font-size: 1.0625rem;
+  }
+
+  .buy {
+    display: grid;
+    gap: 16px;
+    padding: 18px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+
+  .variant-field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .variant-field legend,
+  .qty-row label {
+    margin-bottom: 8px;
+    padding: 0;
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: var(--fs-small);
+  }
+
+  .single-variant {
+    font-family: var(--font-head);
+    font-weight: 500;
+  }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .qty-row label {
+    margin: 0;
+  }
+
+  .qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid #d6ccbb;
+    border-radius: var(--pill);
+    background: var(--white);
+  }
+
+  .qty-btn {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .qty-btn:hover {
+    background: var(--cream-2);
+  }
+
+  .qty-input {
+    width: 44px;
+    height: 46px;
+    border: 0;
+    background: transparent;
+    text-align: center;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .add-btn {
+    min-height: 54px;
+    font-size: 1.0625rem;
+  }
+
+  .usage {
+    display: grid;
+    gap: 12px;
+    padding: 4px 0;
+  }
+
+  .usage div {
+    display: grid;
+    gap: 2px;
+    padding-left: 14px;
+    border-left: 3px solid var(--orange);
+  }
+
+  .usage dt {
+    font-family: var(--font-head);
+    font-weight: 700;
+  }
+
+  .usage dd {
+    color: var(--ink-muted);
+  }
+
+  .health-note :global(svg) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--green-leaf);
+  }
+
+  .related-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (min-width: 600px) {
+    .related-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .product {
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+      padding-top: 12px;
+      padding-bottom: 40px;
+    }
+
+    .product-visual {
+      position: sticky;
+      top: 100px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .related-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

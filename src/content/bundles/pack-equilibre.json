@@ -1,0 +1,24 @@
+{
+  "name": {
+    "fr": "Pack Équilibre",
+    "en": "Balance Bundle"
+  },
+  "need": "detox",
+  "items": [
+    {
+      "product": "detox-equilibre",
+      "variant": "60"
+    },
+    {
+      "product": "confort-digestif",
+      "variant": "60"
+    },
+    {
+      "product": "tisane-detox",
+      "variant": "20"
+    }
+  ],
+  "price": 30000,
+  "regularPrice": 34000,
+  "isPlaceholder": true
+}

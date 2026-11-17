@@ -1,0 +1,45 @@
+{
+  "slug": {
+    "fr": "gouttes-digestion",
+    "en": "gouttes-digestion"
+  },
+  "need": "digestion",
+  "brand": "Marque A",
+  "name": {
+    "fr": "Gouttes Digestion",
+    "en": "Digestion Drops"
+  },
+  "variants": [
+    {
+      "id": "30ml",
+      "label": {
+        "fr": "30 ml",
+        "en": "30 ml"
+      },
+      "price": 6500
+    }
+  ],
+  "benefits": {
+    "fr": [
+      "Pour ton confort digestif",
+      "Se prend simplement, au quotidien",
+      "[bénéfice d'exemple]"
+    ],
+    "en": [
+      "For your digestive comfort",
+      "Easy to take every day",
+      "[example benefit]"
+    ]
+  },
+  "duration": {
+    "fr": "[Durée conseillée : texte d'exemple]",
+    "en": "[Recommended duration: example text]"
+  },
+  "directions": {
+    "fr": "[Mode d'emploi : texte d'exemple]",
+    "en": "[Directions: example text]"
+  },
+  "image": "placeholder",
+  "featured": false,
+  "isPlaceholder": true
+}

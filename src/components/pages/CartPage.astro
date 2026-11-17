@@ -1,0 +1,717 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductVisual from '../ProductVisual.astro';
+import Icon from '../Icon.astro';
+import site from '../../data/site.json';
+import { buildCartCatalog, bundleProducts, getBundles, getProducts } from '../../lib/catalog';
+import { waLink } from '../../lib/format';
+import { t, type Lang } from '../../lib/i18n';
+import { route, routePair } from '../../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const products = await getProducts();
+const bundles = await getBundles();
+
+// Seuil prudent pour la longueur du lien WhatsApp : à ajuster après les tests sur téléphones (docs/07).
+const MAX_WA_URL_LENGTH = 1800;
+
+const payload = {
+  catalog: buildCartCatalog(products, bundles, lang),
+  number: site.whatsappNumber,
+  maxUrl: MAX_WA_URL_LENGTH,
+  m: d.message,
+  c: d.cart,
+  a11y: { quantity: d.product.quantity, remove: d.buttons.remove },
+};
+// Empêche toute fermeture prématurée de la balise <script>.
+const json = JSON.stringify(payload).replace(/</g, '\\u003c');
+---
+
+<BaseLayout lang={lang} title={d.meta.cartTitle} description={d.meta.cartDescription} alternate={routePair('cart')} current="cart" hideWhatsApp>
+  <section class="container cart-page" data-cart-page>
+    <h1>{d.cart.title}</h1>
+
+    <div class="cart-empty" data-cart-empty hidden>
+      <p>{d.cart.empty}</p>
+      <a class="btn btn-primary" href={route('shop', lang)}>{d.buttons.goShop}</a>
+    </div>
+
+    <div class="cart-layout" data-cart-filled hidden>
+      <div class="cart-items">
+        <ul class="lines" role="list" data-cart-lines></ul>
+        <button class="text-btn" type="button" data-cart-clear>
+          <Icon name="trash" size={18} />
+          {d.buttons.clearCart}
+        </button>
+      </div>
+
+      <div class="cart-side">
+        <div class="summary">
+          <div class="summary-row">
+            <span>{d.cart.productsTotal}</span>
+            <span class="price total" data-cart-total></span>
+          </div>
+          <p class="summary-note">{d.cart.deliveryFees}{d.message.lineSep}{d.cart.deliveryFeesValue}</p>
+        </div>
+
+        <form class="order-form" data-order-form novalidate>
+          <h2>{d.cart.formTitle}</h2>
+          <p class="form-intro">{d.cart.formIntro}</p>
+
+          <div class="field">
+            <label for="f-name">{d.cart.name}</label>
+            <input class="input" id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name" />
+            <p class="field-error" id="e-name" hidden>{d.cart.errors.name}</p>
+          </div>
+
+          <div class="field">
+            <label for="f-phone">{d.cart.phone}</label>
+            <input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="e-phone" />
+            <p class="field-error" id="e-phone" hidden>{d.cart.errors.phone}</p>
+          </div>
+
+          <div class="field">
+            <label for="f-country">{d.cart.country}</label>
+            <select class="input" id="f-country" name="country">
+              <option value="CI" selected>{d.cart.countryCI}</option>
+              <option value="other">{d.cart.countryOther}</option>
+            </select>
+          </div>
+
+          <div class="field" data-other-country hidden>
+            <label for="f-other">{d.cart.otherCountry}</label>
+            <input class="input" id="f-other" name="otherCountry" type="text" autocomplete="country-name" aria-describedby="e-country" />
+            <p class="field-error" id="e-country" hidden>{d.cart.errors.country}</p>
+          </div>
+
+          <div class="field">
+            <label for="f-city">{d.cart.city}</label>
+            <input class="input" id="f-city" name="city" type="text" autocomplete="address-level2" required aria-describedby="e-city" />
+            <p class="field-error" id="e-city" hidden>{d.cart.errors.city}</p>
+          </div>
+
+          <div class="field">
+            <label for="f-address">{d.cart.address}</label>
+            <textarea class="input" id="f-address" name="address" rows="2" autocomplete="street-address" required aria-describedby="e-address"></textarea>
+            <p class="field-error" id="e-address" hidden>{d.cart.errors.address}</p>
+          </div>
+
+          <p class="payment" data-payment-note>{d.cart.paymentCI}</p>
+
+          <button class="btn btn-primary btn-block order-btn" type="submit">
+            <Icon name="whatsapp" size={22} />
+            {d.buttons.orderWhatsapp}
+          </button>
+
+          <div class="long-order" data-long-order hidden>
+            <p>{d.cart.longOrder}</p>
+            <button class="btn btn-secondary btn-block" type="button" data-copy-order>
+              <Icon name="copy" size={20} />
+              {d.buttons.copyOrder}
+            </button>
+            <a class="btn btn-outline btn-block" href={waLink(site.whatsappNumber)} target="_blank" rel="noopener">
+              {d.buttons.openWhatsapp}
+            </a>
+            <p class="copy-status" data-copy-status role="status"></p>
+            <textarea class="input order-text" data-order-text rows="8" readonly hidden aria-label={d.buttons.copyOrder}></textarea>
+          </div>
+        </form>
+
+        <p class="track">
+          {d.cart.alreadyOrdered}
+          <a href={waLink(site.whatsappNumber, d.message.track)} target="_blank" rel="noopener">{d.buttons.trackOrder}</a>
+        </p>
+      </div>
+    </div>
+
+    <template id="cart-line">
+      <li class="line">
+        <div class="line-visual" data-visual></div>
+        <div class="line-main">
+          <a class="line-name" data-name></a>
+          <p class="line-variant" data-variant></p>
+          <p class="line-unit" data-unit></p>
+        </div>
+        <button class="line-remove" type="button" data-remove>
+          <Icon name="trash" size={18} />
+        </button>
+        <div class="line-side">
+          <div class="qty">
+            <button class="qty-btn" type="button" data-dec aria-label={d.a11y.decrease}>
+              <Icon name="minus" size={16} />
+            </button>
+            <input class="qty-input" type="number" inputmode="numeric" min="0" max="99" data-qty />
+            <button class="qty-btn" type="button" data-inc aria-label={d.a11y.increase}>
+              <Icon name="plus" size={16} />
+            </button>
+          </div>
+          <p class="price line-total" data-line-total></p>
+        </div>
+      </li>
+    </template>
+
+    {
+      products.map((product) => (
+        <template data-visual-for={product.id}>
+          <ProductVisual product={product} size="sm" />
+        </template>
+      ))
+    }
+    {
+      bundles.map((bundle) => {
+        const first = bundleProducts(bundle, products)[0];
+        return first ? (
+          <template data-visual-for={bundle.id}>
+            <ProductVisual product={first.product} size="sm" />
+          </template>
+        ) : null;
+      })
+    }
+
+    <script is:inline type="application/json" id="cart-data" set:html={json} />
+  </section>
+</BaseLayout>
+
+<script>
+  import { clearCart, readCart, removeFromCart, setQty, type CartItem } from '../../scripts/cart-store';
+  import { formatPrice, waLink } from '../../lib/format';
+  import type { CartCatalog } from '../../lib/catalog';
+
+  interface Payload {
+    catalog: CartCatalog;
+    number: string;
+    maxUrl: number;
+    m: Record<string, string>;
+    c: Record<string, string> & { errors: Record<string, string> };
+    a11y: { quantity: string; remove: string };
+  }
+
+  interface Line {
+    item: CartItem;
+    key: string;
+    name: string;
+    label: string;
+    unit: number;
+    url: string | null;
+  }
+
+  const dataEl = document.getElementById('cart-data');
+  const data: Payload | null = dataEl ? JSON.parse(dataEl.textContent ?? 'null') : null;
+  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
+
+  const empty = $('[data-cart-empty]');
+  const filled = $('[data-cart-filled]');
+  const list = $('[data-cart-lines]');
+  const totalEl = $('[data-cart-total]');
+  const lineTpl = $<HTMLTemplateElement>('#cart-line');
+  const form = $<HTMLFormElement>('[data-order-form]');
+  const longOrder = $('[data-long-order]');
+  const copyStatus = $('[data-copy-status]');
+  let lastMessage = '';
+
+  function resolve(item: CartItem): Line | null {
+    if (!data) return null;
+    const key = `${item.id}::${item.variantId ?? ''}`;
+    if (item.variantId === null) {
+      const bundle = data.catalog.bundles[item.id];
+      return bundle ? { item, key, name: bundle.name, label: '', unit: bundle.price, url: null } : null;
+    }
+    const product = data.catalog.products[item.id];
+    const variant = product?.variants[item.variantId];
+    return product && variant ? { item, key, name: product.name, label: variant.label, unit: variant.price, url: product.url } : null;
+  }
+
+  function currentLines(): Line[] {
+    return readCart()
+      .map(resolve)
+      .filter((l): l is Line => l !== null);
+  }
+
+  function render() {
+    if (!data || !list || !lineTpl) return;
+    const lines = currentLines();
+    const isEmpty = lines.length === 0;
+    if (empty) empty.hidden = !isEmpty;
+    if (filled) filled.hidden = isEmpty;
+
+    // Garde le focus sur la même commande après le nouvel affichage.
+    const active = document.activeElement as HTMLElement | null;
+    const activeKey = active?.closest<HTMLElement>('[data-key]')?.dataset.key;
+    const activeRole = active ? ['data-dec', 'data-inc', 'data-qty', 'data-remove'].find((a) => active.hasAttribute(a)) : undefined;
+
+    list.replaceChildren();
+    let total = 0;
+    for (const line of lines) {
+      const node = lineTpl.content.firstElementChild!.cloneNode(true) as HTMLElement;
+      node.dataset.key = line.key;
+      const subtotal = line.unit * line.item.qty;
+      total += subtotal;
+
+      const visual = document.querySelector<HTMLTemplateElement>(`template[data-visual-for="${CSS.escape(line.item.id)}"]`);
+      if (visual) $('[data-visual]', node)?.append(visual.content.cloneNode(true));
+
+      const nameEl = $<HTMLAnchorElement>('[data-name]', node)!;
+      nameEl.textContent = line.name;
+      if (line.url) nameEl.href = line.url;
+      else nameEl.removeAttribute('href');
+
+      $('[data-variant]', node)!.textContent = line.label;
+      $('[data-variant]', node)!.hidden = !line.label;
+      $('[data-unit]', node)!.textContent = formatPrice(line.unit);
+      $('[data-line-total]', node)!.textContent = formatPrice(subtotal);
+
+      const qty = $<HTMLInputElement>('[data-qty]', node)!;
+      qty.value = String(line.item.qty);
+      qty.setAttribute('aria-label', `${data.a11y.quantity}, ${line.name}`);
+      const { id, variantId } = line.item;
+      qty.addEventListener('change', () => setQty(id, variantId, Math.round(Number(qty.value)) || 0));
+      $('[data-dec]', node)!.addEventListener('click', () => setQty(id, variantId, line.item.qty - 1));
+      $('[data-inc]', node)!.addEventListener('click', () => setQty(id, variantId, line.item.qty + 1));
+      const remove = $('[data-remove]', node)!;
+      remove.setAttribute('aria-label', `${data.a11y.remove}, ${line.name}`);
+      remove.addEventListener('click', () => removeFromCart(id, variantId));
+
+      list.append(node);
+    }
+    if (totalEl) totalEl.textContent = formatPrice(total);
+
+    if (activeKey && activeRole) {
+      const target = list.querySelector<HTMLElement>(`[data-key="${CSS.escape(activeKey)}"] [${activeRole}]`);
+      (target ?? $('[data-cart-clear]'))?.focus();
+    }
+    if (longOrder) longOrder.hidden = true;
+  }
+
+  // ---------- Formulaire et message WhatsApp ----------
+  const field = (name: string) => form?.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | null;
+  const isCI = () => field('country')?.value !== 'other';
+
+  function updateCountry() {
+    const other = $('[data-other-country]');
+    if (other) other.hidden = isCI();
+    const note = $('[data-payment-note]');
+    if (note && data) note.textContent = isCI() ? data.c.paymentCI : data.c.paymentOther;
+  }
+
+  function setError(input: HTMLElement | null, errorId: string, show: boolean) {
+    const error = document.getElementById(errorId);
+    if (error) error.hidden = !show;
+    input?.setAttribute('aria-invalid', show ? 'true' : 'false');
+  }
+
+  function validate(): boolean {
+    const checks: [string, string, (v: string) => boolean][] = [
+      ['name', 'e-name', (v) => v.length >= 2],
+      ['phone', 'e-phone', (v) => /^\+?[\d\s().-]+$/.test(v) && v.replace(/\D/g, '').length >= 8 && v.replace(/\D/g, '').length <= 15],
+      ['city', 'e-city', (v) => v.length >= 2],
+      ['address', 'e-address', (v) => v.length >= 3],
+    ];
+    if (!isCI()) checks.splice(2, 0, ['otherCountry', 'e-country', (v) => v.length >= 2]);
+    let firstInvalid: HTMLElement | null = null;
+    for (const [name, errorId, ok] of checks) {
+      const input = field(name);
+      const valid = ok((input?.value ?? '').trim());
+      setError(input, errorId, !valid);
+      if (!valid && !firstInvalid) firstInvalid = input;
+    }
+    firstInvalid?.focus();
+    return firstInvalid === null;
+  }
+
+  function buildMessage(): string {
+    if (!data) return '';
+    const { m, c } = data;
+    const lines = currentLines();
+    const total = lines.reduce((sum, l) => sum + l.unit * l.item.qty, 0);
+    const value = (name: string) => (field(name)?.value ?? '').trim();
+    const country = isCI() ? c.countryCI : value('otherCountry');
+    return [
+      m.orderIntro,
+      '',
+      ...lines.map((l) => `• ${l.name}${l.label ? ` (${l.label})` : ''} × ${l.item.qty}${m.lineSep}${formatPrice(l.unit * l.item.qty)}`),
+      '',
+      `${m.productsTotal} ${formatPrice(total)}`,
+      m.deliveryFees,
+      '',
+      `${m.name} ${value('name')}`,
+      `${m.phone} ${value('phone')}`,
+      `${m.cityCountry} ${value('city')} / ${country}`,
+      `${m.address} ${value('address')}`,
+      '',
+      isCI() ? m.paymentCI : m.paymentOther,
+    ]
+      .join('\n')
+      .replace(/ /g, ' ');
+  }
+
+  async function copyText(text: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.append(area);
+      area.select();
+      const ok = document.execCommand('copy');
+      area.remove();
+      return ok;
+    }
+  }
+
+  if (data && form) {
+    field('country')?.addEventListener('change', updateCountry);
+    updateCountry();
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!validate() || currentLines().length === 0) return;
+      lastMessage = buildMessage();
+      const url = waLink(data.number, lastMessage);
+      if (url.length > data.maxUrl) {
+        if (longOrder) {
+          longOrder.hidden = false;
+          longOrder.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+        return;
+      }
+      const win = window.open(url, '_blank');
+      if (win) win.opener = null;
+      else window.location.href = url;
+    });
+
+    $('[data-copy-order]')?.addEventListener('click', async () => {
+      const message = lastMessage || buildMessage();
+      const ok = await copyText(message);
+      if (copyStatus) copyStatus.textContent = ok ? data.c.copied : data.c.copyFailed;
+      const area = $<HTMLTextAreaElement>('[data-order-text]');
+      if (area && !ok) {
+        area.value = message;
+        area.hidden = false;
+        area.focus();
+        area.select();
+      }
+    });
+  }
+
+  $('[data-cart-clear]')?.addEventListener('click', () => clearCart());
+  window.addEventListener('cart:change', render);
+  window.addEventListener('cart:external', render);
+  render();
+</script>
+
+<style>
+  .cart-page {
+    padding-top: 36px;
+    padding-bottom: 72px;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+    margin-bottom: 22px;
+  }
+
+  .cart-empty {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    padding: 28px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+    font-size: 1.0625rem;
+  }
+
+  .cart-layout {
+    display: grid;
+    gap: 24px;
+  }
+
+  .cart-items {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+
+  .lines {
+    display: grid;
+    gap: 12px;
+  }
+
+  .line {
+    display: grid;
+    grid-template-columns: 64px 1fr 44px;
+    gap: 12px 10px;
+    padding: 14px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+
+  .line-visual {
+    width: 64px;
+  }
+
+  .line-main {
+    display: grid;
+    gap: 2px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .line-name {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  a.line-name[href]:hover {
+    text-decoration: underline;
+  }
+
+  .line-variant,
+  .line-unit {
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+  }
+
+  .line-remove {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: -6px -6px 0 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+  }
+
+  .line-remove:hover {
+    color: #b3261e;
+    background: #fbeaea;
+  }
+
+  .line-side {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .line-total {
+    font-size: 1.0625rem;
+  }
+
+  .qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid #d6ccbb;
+    border-radius: var(--pill);
+  }
+
+  .qty-btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .qty-btn:hover {
+    background: var(--cream-2);
+  }
+
+  .qty-input {
+    width: 38px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    text-align: center;
+    font-family: var(--font-head);
+    font-weight: 700;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .text-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-self: start;
+    min-height: 44px;
+    padding: 0 6px;
+    border: 0;
+    background: none;
+    color: var(--ink-muted);
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: var(--fs-small);
+    cursor: pointer;
+  }
+
+  .text-btn:hover {
+    color: #b3261e;
+  }
+
+  .summary {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border-radius: var(--radius-l);
+    background: var(--green-night);
+    color: var(--cream);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .summary-note {
+    color: var(--on-dark-muted);
+    font-size: var(--fs-small);
+  }
+
+  .total {
+    font-size: 1.375rem;
+  }
+
+  .order-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 18px 16px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+
+  .order-form h2 {
+    font-size: 1.25rem;
+  }
+
+  .form-intro,
+  .payment {
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+  }
+
+  .payment {
+    padding: 10px 12px;
+    border-radius: var(--radius-s);
+    background: var(--cream);
+  }
+
+  textarea.input {
+    resize: vertical;
+    min-height: 72px;
+  }
+
+  .order-btn {
+    min-height: 56px;
+    padding-inline: 0.9rem;
+    gap: 0.45rem;
+  }
+
+  @media (min-width: 600px) {
+    .order-form {
+      padding: 22px;
+    }
+  }
+
+  .long-order {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+    border-radius: var(--radius-m);
+    background: var(--cream-2);
+  }
+
+  .long-order p:first-child {
+    font-weight: 500;
+  }
+
+  .order-text {
+    font-size: var(--fs-small);
+    line-height: 1.5;
+  }
+
+  .copy-status {
+    font-size: var(--fs-small);
+    color: var(--green-leaf);
+    font-weight: 500;
+  }
+
+  .track {
+    margin-top: 14px;
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+  }
+
+  .track a {
+    font-weight: 500;
+  }
+
+  @media (min-width: 600px) {
+    .line {
+      grid-template-columns: 72px 1fr auto 44px;
+      align-items: center;
+    }
+
+    .line-visual {
+      width: 72px;
+    }
+
+    .line-side {
+      grid-column: 3;
+      grid-row: 1;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .line-remove {
+      grid-column: 4;
+      grid-row: 1;
+      margin: 0;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .cart-layout {
+      grid-template-columns: 1.4fr 1fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .cart-side {
+      position: sticky;
+      top: 96px;
+    }
+  }
+</style>

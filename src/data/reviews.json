@@ -1,0 +1,32 @@
+{
+  "_note": "AVIS D'EXEMPLE pour la maquette. À remplacer par de vrais témoignages (TikTok @frateg). Ne jamais présenter un exemple comme un vrai avis.",
+  "items": [
+    {
+      "name": "[Prénom]",
+      "city": "[Ville]",
+      "text": {
+        "fr": "[Avis d'exemple : à remplacer par un vrai témoignage TikTok]",
+        "en": "[Example review: to be replaced with a real TikTok testimonial]"
+      },
+      "isPlaceholder": true
+    },
+    {
+      "name": "[Prénom]",
+      "city": "[Ville]",
+      "text": {
+        "fr": "[Avis d'exemple : à remplacer par un vrai témoignage TikTok]",
+        "en": "[Example review: to be replaced with a real TikTok testimonial]"
+      },
+      "isPlaceholder": true
+    },
+    {
+      "name": "[Prénom]",
+      "city": "[Ville]",
+      "text": {
+        "fr": "[Avis d'exemple : à remplacer par un vrai témoignage TikTok]",
+        "en": "[Example review: to be replaced with a real TikTok testimonial]"
+      },
+      "isPlaceholder": true
+    }
+  ]
+}

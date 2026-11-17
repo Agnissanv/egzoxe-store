@@ -1,0 +1,55 @@
+---
+import { t, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+const d = t(Astro.props.lang);
+---
+
+<div class="announce">
+  <p class="container">
+    <span>{d.announcement.delivery}</span>
+    <span class="dot" aria-hidden="true"></span>
+    <span>{d.announcement.fees}</span>
+  </p>
+</div>
+
+<style>
+  .announce {
+    background: var(--green-leaf);
+    color: var(--white);
+    font-size: var(--fs-caption);
+    font-weight: 500;
+  }
+
+  .announce p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 0;
+    padding-block: 7px;
+    text-align: center;
+    line-height: 1.45;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--green-bright);
+  }
+
+  /* Sur petit écran, les deux phrases passent l'une sous l'autre, sans point. */
+  @media (max-width: 559px) {
+    .announce p {
+      flex-direction: column;
+    }
+
+    .dot {
+      display: none;
+    }
+  }
+</style>

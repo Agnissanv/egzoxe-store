@@ -1,0 +1,592 @@
+---
+import { Picture } from 'astro:assets';
+import heroCapsule from '../../assets/brand/hero-capsule.png';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../ProductCard.astro';
+import BundleCard from '../BundleCard.astro';
+import Icon from '../Icon.astro';
+import Txt from '../Txt.astro';
+import reviews from '../../data/reviews.json';
+import { getBundles, getProducts, needColor, NEED_ORDER } from '../../lib/catalog';
+import { t, type Lang } from '../../lib/i18n';
+import { route, routePair } from '../../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const products = await getProducts();
+const bundles = await getBundles();
+const featured = products.filter((p) => p.data.featured).slice(0, 4);
+const shop = route('shop', lang);
+---
+
+<BaseLayout lang={lang} title={d.meta.homeTitle} description={d.meta.homeDescription} alternate={routePair('home')} current="home">
+  <!-- Héros : seul moment animé du site -->
+  <section class="hero on-dark" aria-labelledby="hero-title">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1 id="hero-title">
+          {d.home.heroTitleStart}
+          <span class="accent">{d.home.heroTitleAccent}</span>
+        </h1>
+        <p class="hero-sub">{d.home.heroSubtitle}</p>
+        <a class="btn btn-primary hero-cta" href={shop}>
+          {d.buttons.seeProducts}
+          <Icon name="arrow" size={18} />
+        </a>
+        <ul class="hero-points" role="list">
+          {
+            d.home.heroPoints.map((point) => (
+              <li>
+                <Icon name="check" size={18} />
+                {point}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-sun"></div>
+        <div class="hero-float">
+          <Picture
+            src={heroCapsule}
+            alt=""
+            widths={[280, 420, 560]}
+            sizes="(min-width: 900px) 440px, 72vw"
+            formats={['avif']}
+            fallbackFormat="webp"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Besoins -->
+  <section class="section" aria-labelledby="needs-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" id="needs-title">{d.home.needsTitle}</h2>
+      </div>
+      <ul class="needs" role="list">
+        {
+          NEED_ORDER.map((need) => (
+            <li>
+              <a class="need" href={`${shop}?need=${need}`} style={`--disc: ${needColor(need)}`}>
+                <span class="need-disc" aria-hidden="true" />
+                <span class="need-text">
+                  <span class="need-label">{d.needs[need].label}</span>
+                  <span class="need-desc">{d.needs[need].text}</span>
+                </span>
+                <Icon name="arrow" size={20} class="need-arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Produits vedettes -->
+  <section class="section featured" aria-labelledby="featured-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" id="featured-title">{d.home.featuredTitle}</h2>
+      </div>
+      <div class="product-grid">
+        {featured.map((product) => <ProductCard product={product} lang={lang} />)}
+      </div>
+      <div class="section-foot">
+        <a class="btn btn-secondary" href={shop}>{d.buttons.seeShop}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Forfaits -->
+  <section class="section band-tinted" aria-labelledby="bundles-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" id="bundles-title">{d.home.bundlesTitle}</h2>
+        <p class="section-lead">{d.home.bundlesText}</p>
+      </div>
+      <div class="bundle-grid">
+        {bundles.map((bundle) => <BundleCard bundle={bundle} products={products} lang={lang} />)}
+      </div>
+      <div class="section-foot">
+        <a class="link-arrow" href={route('bundles', lang)}>
+          {d.buttons.seeBundles}
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comment commander : vraie séquence, la numérotation est justifiée -->
+  <section class="section on-dark steps-section" aria-labelledby="steps-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" id="steps-title">{d.home.stepsTitle}</h2>
+      </div>
+      <ol class="steps" role="list">
+        {
+          d.home.steps.map((step, i) => (
+            <li class="step">
+              <span class="step-num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Avis : exemples clairement marqués, à remplacer -->
+  <section class="section" aria-labelledby="reviews-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" id="reviews-title">{d.home.reviewsTitle}</h2>
+        <p class="section-lead">{d.home.reviewsText}</p>
+      </div>
+      <ul class="reviews" role="list">
+        {
+          reviews.items.map((review) => (
+            <li class="review">
+              {review.isPlaceholder && <span class="chip-example">{d.reviews.exampleBadge}</span>}
+              <blockquote>
+                <p>
+                  <Txt text={review.text[lang as Lang]} />
+                </p>
+              </blockquote>
+              <p class="review-author">
+                <Txt text={review.name} />, <Txt text={review.city} />
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ courte -->
+  <section class="section faq-section" aria-labelledby="faq-title">
+    <div class="container faq-inner">
+      <div class="section-head">
+        <h2 class="section-title" id="faq-title">{d.home.faqTitle}</h2>
+      </div>
+      <div class="faq">
+        {
+          d.home.faq.map((item) => (
+            <details>
+              <summary>
+                <span>{item.q}</span>
+                <Icon name="chevron" size={20} />
+              </summary>
+              <p>{item.a}</p>
+            </details>
+          ))
+        }
+        <a class="link-arrow" href={route('faq', lang)}>
+          {d.home.faqMore}
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Héros ---------- */
+  .hero {
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: 8px;
+    padding-top: 36px;
+    padding-bottom: 48px;
+  }
+
+  .hero h1 {
+    font-size: var(--fs-display);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+  .accent {
+    display: block;
+    color: var(--orange);
+  }
+
+  .hero-sub {
+    margin-top: 16px;
+    max-width: 30rem;
+    font-size: 1.125rem;
+    color: var(--on-dark-muted);
+  }
+
+  .hero-cta {
+    margin-top: 24px;
+  }
+
+  .hero-points {
+    display: grid;
+    gap: 6px;
+    margin-top: 22px;
+    font-size: var(--fs-small);
+    color: var(--on-dark-muted);
+  }
+
+  .hero-points li {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .hero-points :global(svg) {
+    color: var(--green-bright);
+    flex: none;
+  }
+
+  .hero-text {
+    order: 2;
+  }
+
+  .hero-visual {
+    order: 1;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(70vw, 300px);
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
+
+  .hero-sun {
+    position: absolute;
+    inset: 9%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #ff9a33 0%, var(--orange) 55%, #e86d00 100%);
+    animation: sun-rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-float {
+    position: relative;
+    width: 86%;
+    animation: float 5.5s ease-in-out 1.2s infinite;
+  }
+
+  /* Pas d'ombre portée : elle assombrissait le disque orange (le logo a déjà son ombre au sol). */
+  .hero-float :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  @keyframes sun-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18%) scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-7px) rotate(-1.5deg);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 40px;
+      padding-top: 64px;
+      padding-bottom: 88px;
+    }
+
+    .hero-text,
+    .hero-visual {
+      order: 0;
+    }
+
+    .hero-visual {
+      width: 100%;
+      max-width: 480px;
+    }
+  }
+
+  /* ---------- Besoins ---------- */
+  .needs {
+    display: grid;
+    gap: 12px;
+  }
+
+  .need {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px 12px 12px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .need:hover {
+    border-color: var(--green-night);
+  }
+
+  .need-disc {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--disc);
+    box-shadow: inset 0 0 0 1px rgb(3 39 16 / 0.12);
+  }
+
+  .need-text {
+    display: grid;
+    gap: 2px;
+  }
+
+  .need-label {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .need-desc {
+    color: var(--ink-muted);
+    font-size: var(--fs-small);
+    line-height: 1.4;
+  }
+
+  .need :global(.need-arrow) {
+    color: var(--green-leaf);
+  }
+
+  @media (min-width: 720px) {
+    .needs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .needs {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .need {
+      grid-template-columns: 1fr;
+      align-content: start;
+      gap: 18px;
+      padding: 22px;
+    }
+
+    .need-disc {
+      width: 76px;
+      height: 76px;
+    }
+
+    .need :global(.need-arrow) {
+      justify-self: start;
+    }
+  }
+
+  /* ---------- Grilles ---------- */
+  .product-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (min-width: 600px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .bundle-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 720px) {
+    .bundle-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  /* ---------- Étapes ---------- */
+  .steps {
+    display: grid;
+    gap: 14px;
+    counter-reset: none;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 16px;
+    padding: 18px;
+    border-radius: var(--radius-l);
+    background: var(--green-night-2);
+  }
+
+  .step-num {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--green-night);
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.375rem;
+  }
+
+  .step h3 {
+    font-size: 1.125rem;
+    margin-bottom: 4px;
+  }
+
+  .step p {
+    color: var(--on-dark-muted);
+    font-size: 0.9688rem;
+  }
+
+  @media (min-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .step {
+      grid-template-columns: 1fr;
+      align-content: start;
+      padding: 24px;
+    }
+  }
+
+  /* ---------- Avis ---------- */
+  .reviews {
+    display: grid;
+    gap: 14px;
+  }
+
+  .review {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    justify-items: start;
+    padding: 20px;
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+
+  .review blockquote {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+
+  .review-author {
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: var(--fs-small);
+  }
+
+  @media (min-width: 900px) {
+    .reviews {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-section {
+    padding-top: 0;
+  }
+
+  .faq {
+    display: grid;
+    gap: 10px;
+    max-width: 48rem;
+  }
+
+  .faq details {
+    border-radius: var(--radius-m);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+
+  .faq summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 14px 18px;
+    font-family: var(--font-head);
+    font-weight: 500;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq summary :global(svg) {
+    flex: none;
+    color: var(--green-leaf);
+    transition: transform 0.2s ease;
+  }
+
+  .faq details[open] summary :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .faq details p {
+    padding: 0 18px 16px;
+    color: var(--ink-muted);
+  }
+
+  @media (min-width: 960px) {
+    .faq-inner {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 40px;
+      align-items: start;
+    }
+  }
+</style>

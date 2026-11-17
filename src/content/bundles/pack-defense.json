@@ -1,0 +1,20 @@
+{
+  "name": {
+    "fr": "Pack Défense",
+    "en": "Defense Bundle"
+  },
+  "need": "immunity",
+  "items": [
+    {
+      "product": "defense-plus",
+      "variant": "60"
+    },
+    {
+      "product": "vitamine-c-plus",
+      "variant": "60"
+    }
+  ],
+  "price": 18500,
+  "regularPrice": 20500,
+  "isPlaceholder": true
+}

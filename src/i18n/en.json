@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "siteName": "EGZOXÉ store",
+    "homeTitle": "EGZOXÉ store · YUPI and LIVEGOOD food supplements in Abidjan",
+    "homeDescription": "YUPI and LIVEGOOD food supplements, delivered across Côte d'Ivoire and abroad. Order on WhatsApp, cash on delivery in Côte d'Ivoire.",
+    "shopTitle": "Shop",
+    "shopDescription": "YUPI and LIVEGOOD food supplements, sorted by need: immunity, detox, energy, digestion.",
+    "bundlesTitle": "Bundles",
+    "bundlesDescription": "Ready-to-order food supplement packs, grouped around one need.",
+    "cartTitle": "Cart",
+    "cartDescription": "Your EGZOXÉ store cart: send your order on WhatsApp in one tap.",
+    "notFoundTitle": "Page not found"
+  },
+  "a11y": {
+    "skip": "Skip to content",
+    "menu": "Open menu",
+    "mainNav": "Main navigation",
+    "footerNav": "Useful links",
+    "home": "EGZOXÉ store, back to home",
+    "cart": "Cart",
+    "cartItems": "item(s) in cart",
+    "langSwitch": "Language",
+    "whatsapp": "Message EGZOXÉ store on WhatsApp",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "breadcrumb": "Breadcrumb",
+    "filters": "Shop filters"
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "bundles": "Bundles",
+    "cart": "Cart",
+    "faq": "FAQ",
+    "reviews": "Reviews",
+    "delivery": "Delivery",
+    "legal": "Legal notice",
+    "trackOrder": "Track my order"
+  },
+  "announcement": {
+    "delivery": "Delivery across Côte d'Ivoire and abroad",
+    "fees": "Fees confirmed on WhatsApp"
+  },
+  "buttons": {
+    "seeProducts": "Shop now",
+    "seeShop": "See the full shop",
+    "addToCart": "Add to cart",
+    "learnMore": "Learn more",
+    "orderWhatsapp": "Order on WhatsApp",
+    "trackOrder": "Track my order",
+    "writeWhatsapp": "Message us on WhatsApp",
+    "copyOrder": "Copy order",
+    "send": "Send",
+    "subscribe": "Sign up",
+    "goShop": "Go to the shop",
+    "seeBundles": "See the bundles",
+    "seeCart": "View cart",
+    "openWhatsapp": "Open WhatsApp",
+    "clearCart": "Empty cart",
+    "remove": "Remove",
+    "backHome": "Back to home"
+  },
+  "product": {
+    "duration": "Recommended duration",
+    "directions": "Directions",
+    "chooseSize": "Choose your size",
+    "quantity": "Quantity",
+    "from": "From",
+    "ingredients": "Ingredients",
+    "precautions": "Precautions",
+    "benefits": "What it brings you",
+    "related": "Same need",
+    "brand": "Brand",
+    "exampleBadge": "Example",
+    "placeholderNote": "Example product for the mockup: name, price and texts will be replaced with the real product."
+  },
+  "needs": {
+    "immunity": {
+      "label": "Immunity",
+      "text": "Support your natural defenses"
+    },
+    "detox": {
+      "label": "Detox",
+      "text": "A boost for your daily balance"
+    },
+    "energy": {
+      "label": "Energy",
+      "text": "Keep your pace all day"
+    },
+    "digestion": {
+      "label": "Digestion",
+      "text": "For your digestive comfort"
+    }
+  },
+  "home": {
+    "heroTitleStart": "Take care of yourself,",
+    "heroTitleAccent": "every day",
+    "heroSubtitle": "YUPI and LIVEGOOD food supplements, delivered to you.",
+    "heroPoints": [
+      "Easy ordering on WhatsApp",
+      "Cash on delivery in Côte d'Ivoire"
+    ],
+    "needsTitle": "Shop by need",
+    "featuredTitle": "Most popular",
+    "bundlesTitle": "Ready-to-order packs",
+    "bundlesText": "Several products grouped around one need. One message to order everything.",
+    "stepsTitle": "3 simple steps",
+    "steps": [
+      {
+        "title": "Pick your products",
+        "text": "Add them to your cart."
+      },
+      {
+        "title": "Send your order on WhatsApp",
+        "text": "The message is already written, just tap send."
+      },
+      {
+        "title": "Receive and pay on delivery",
+        "text": "We confirm stock and delivery fees with you. In Côte d'Ivoire, you pay on receipt. Abroad, we agree on the terms with you."
+      }
+    ],
+    "reviewsTitle": "What people say",
+    "reviewsText": "Customers share their experience on TikTok.",
+    "faqTitle": "Your questions",
+    "faq": [
+      {
+        "q": "How long should I take a supplement?",
+        "a": "Follow the recommended duration on the product page and packaging. If in doubt, ask a health professional."
+      },
+      {
+        "q": "How do I take my product?",
+        "a": "Directions are on each product page. Questions? Message us on WhatsApp."
+      },
+      {
+        "q": "How does delivery work?",
+        "a": "We deliver across Côte d'Ivoire and abroad. Fees depend on your location and are confirmed on WhatsApp before shipping."
+      }
+    ],
+    "faqMore": "All questions"
+  },
+  "shop": {
+    "title": "Shop",
+    "intro": "Pick your supplements by need or by brand.",
+    "need": "Need",
+    "brand": "Brand",
+    "all": "All",
+    "search": "Search for a product",
+    "searchPlaceholder": "Product name…",
+    "count": "{n} product(s)",
+    "noResults": "No product matches. Try another need or another word.",
+    "reset": "Show everything",
+    "bundlesBanner": "Want to order everything at once?"
+  },
+  "bundles": {
+    "title": "Bundles",
+    "intro": "Several products grouped around one need. One message to order everything.",
+    "contains": "In this pack",
+    "insteadOf": "instead of"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty. Explore our products to get started.",
+    "productsTotal": "Products total",
+    "deliveryFees": "Delivery fees",
+    "deliveryFeesValue": "to be confirmed on WhatsApp",
+    "formTitle": "Your details",
+    "formIntro": "They are added to the WhatsApp message. Nothing is sent until you tap \"send\" in WhatsApp.",
+    "name": "Name",
+    "phone": "Phone",
+    "country": "Country",
+    "countryCI": "Côte d'Ivoire",
+    "countryOther": "Another country",
+    "otherCountry": "Which country?",
+    "city": "City",
+    "address": "Delivery address",
+    "errors": {
+      "name": "Enter your name.",
+      "phone": "Enter a valid phone number.",
+      "country": "Enter your country.",
+      "city": "Enter your city.",
+      "address": "Enter your delivery address."
+    },
+    "paymentCI": "In Côte d'Ivoire, you pay in cash on delivery.",
+    "paymentOther": "Abroad, we agree on payment terms with you on WhatsApp.",
+    "longOrder": "Your order is long. Copy it, then paste it into the WhatsApp conversation.",
+    "copied": "Order copied. Open WhatsApp and paste it into the conversation.",
+    "alreadyOrdered": "Already ordered?",
+    "copyFailed": "Couldn't copy automatically: select the text below and copy it."
+  },
+  "message": {
+    "orderIntro": "Hello EGZOXÉ store, I would like to order:",
+    "lineSep": ": ",
+    "productsTotal": "Products total:",
+    "deliveryFees": "Delivery fees: to be confirmed",
+    "name": "Name:",
+    "phone": "Phone:",
+    "cityCountry": "City / country:",
+    "address": "Delivery address:",
+    "paymentCI": "Payment: cash on delivery",
+    "paymentOther": "Payment: to be agreed",
+    "track": "Hello EGZOXÉ store, I would like to track my order.\nName: \nOrder date: ",
+    "hello": "Hello EGZOXÉ store, "
+  },
+  "reviews": {
+    "exampleBadge": "Example"
+  },
+  "newsletter": {
+    "title": "Stay in the loop.",
+    "text": "Get news and our wellness tips.",
+    "email": "Your email",
+    "pending": "Mockup: sign-up will be connected in the next step."
+  },
+  "footer": {
+    "healthNote": "These products are food supplements. They do not replace medical treatment or a varied diet.",
+    "brandsTitle": "Our brands",
+    "brandsPlaceholder": [
+      "[YUPI GLOBAL logo]",
+      "[LIVEGOOD logo]"
+    ],
+    "follow": "Follow us",
+    "city": "Abidjan, Côte d'Ivoire",
+    "madeBy": "Website by Code A-Z",
+    "rights": "© 2026 EGZOXÉ store"
+  },
+  "toast": {
+    "added": "Added to cart"
+  },
+  "comingSoon": {
+    "badge": "Coming soon",
+    "text": "This page arrives in the next step. Meanwhile, explore the shop or message us on WhatsApp."
+  },
+  "notFound": {
+    "text": "This page doesn't exist or has moved."
+  }
+}
